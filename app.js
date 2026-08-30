@@ -69,7 +69,8 @@ function seedInitialData() {
       image: null,
       approvedSolutionId: null,
       solutions: [],
-      readme: null
+      readme: null,
+      upvotes: []
     },
     {
       id: 2,
@@ -83,7 +84,8 @@ function seedInitialData() {
       image: null,
       approvedSolutionId: null,
       solutions: [],
-      readme: null
+      readme: null,
+      upvotes: []
     }
   ];
 
@@ -96,7 +98,8 @@ function seedInitialData() {
       status: t.status || 'OPEN',
       urgent: t.urgent || false,
       image: t.image || null,
-      approvedSolutionId: t.approvedSolutionId || null
+      approvedSolutionId: t.approvedSolutionId || null,
+      upvotes: Array.isArray(t.upvotes) ? t.upvotes : []
     }));
     localStorage.setItem('solveit_tickets', JSON.stringify(updated));
   }
@@ -106,7 +109,6 @@ function seedInitialData() {
   }
 }
 
-/* YENİLENEN NAVİGASYON/PROFİL SİMGESİ GÖRÜNÜMÜ */
 function checkUserSession() {
   const user = JSON.parse(localStorage.getItem('solveit_user'));
   const navAuthArea = document.getElementById('navAuthArea');
@@ -283,7 +285,7 @@ function renderTickets() {
   const tickets = getTickets();
   grid.innerHTML = '';
 
-  const filtered = tickets.filter(t => {
+  let filtered = tickets.filter(t => {
     if (currentCategoryFilter === 'resolved') {
       if (t.status !== 'RESOLVED') return false;
     } 
@@ -291,6 +293,9 @@ function renderTickets() {
       if (t.status === 'RESOLVED') return false;
       if (t.urgent !== true) return false;
     } 
+    else if (currentCategoryFilter === 'most_voted') {
+      if (t.status === 'RESOLVED') return false;
+    }
     else {
       if (t.status === 'RESOLVED') return false;
       if (currentCategoryFilter !== 'all' && t.category.toLowerCase() !== currentCategoryFilter.toLowerCase()) {
@@ -308,6 +313,10 @@ function renderTickets() {
     return matchesSearch;
   });
 
+  if (currentCategoryFilter === 'most_voted') {
+    filtered.sort((a, b) => (b.upvotes ? b.upvotes.length : 0) - (a.upvotes ? a.upvotes.length : 0));
+  }
+
   if (filtered.length === 0) {
     grid.innerHTML = `
       <div class="col-span-2 text-center py-12 px-4 border border-dashed border-slate-800 rounded-2xl bg-[#121215]">
@@ -323,6 +332,8 @@ function renderTickets() {
     const isReserved = Boolean(t.reservedBy);
     const isOwner = user && user.username === t.issuer;
     const isResolved = t.status === 'RESOLVED';
+    const upvotesList = t.upvotes || [];
+    const hasUpvoted = user && upvotesList.includes(user.username);
 
     const statusText = isResolved
       ? '✓ SOLVED & APPROVED'
@@ -346,15 +357,15 @@ function renderTickets() {
         ${isResolved ? `<div class="absolute inset-0 bg-black/10 pointer-events-none flex items-center justify-center font-black text-emerald-800/20 text-4xl rotate-[-12deg] tracking-widest select-none">RESOLVED</div>` : ''}
         
         <div>
-          <div class="flex justify-between items-center text-xs font-bold tracking-wider opacity-80 mb-3">
+          <div class="flex justify-between items-center text-xs font-bold tracking-wider opacity-80 mb-2">
             <span class="${t.urgent && !isResolved ? 'pl-7' : ''}">TICKET #${formatTicketId(t.id)} ${isResolved ? '(STUB)' : ''}</span>
             <span class="uppercase font-extrabold">${t.category}</span>
           </div>
 
-          <h3 class="text-xl font-bold leading-tight mb-3 text-black">${t.title}</h3>
+          <h3 class="text-lg font-bold leading-snug mb-2 text-black line-clamp-2 h-12">${t.title}</h3>
           
           <div class="flex gap-3 items-start">
-            <p class="text-xs opacity-80 line-clamp-3 leading-relaxed font-semibold flex-1">${t.description}</p>
+            <p class="text-xs opacity-80 line-clamp-3 h-14 leading-relaxed font-semibold flex-1">${t.description}</p>
           </div>
         </div>
 
@@ -367,15 +378,15 @@ function renderTickets() {
       <div class="w-32 p-3 flex flex-col justify-between items-center bg-black/10 text-center z-10 relative">
         <span class="text-[9px] font-bold tracking-widest opacity-70">${isResolved ? 'USED STUB' : 'ADMIT ONE'}</span>
         
-        <div class="w-full h-10 barcode-lines opacity-80 my-1"></div>
+        <div class="w-full h-8 barcode-lines opacity-80 my-1"></div>
         
         <div class="w-full space-y-1">
-          <button onclick="openDetailModal(${t.id})" class="w-full bg-black text-white text-[9px] font-bold py-1.5 rounded uppercase tracking-wider hover:opacity-80 transition">
+          <button onclick="openDetailModal(${t.id})" class="w-full bg-black text-white text-[9px] font-bold py-1 rounded uppercase tracking-wider hover:opacity-80 transition">
             INSPECT
           </button>
           
           ${!isResolved ? `
-            <button onclick="toggleReserveTicket(event, ${t.id})" class="w-full ${isReserved ? 'bg-red-600 text-white' : 'bg-[#18181b] text-[#facc15]'} border border-amber-400/20 text-[9px] font-bold py-1.5 rounded uppercase tracking-wider hover:opacity-90 transition">
+            <button onclick="toggleReserveTicket(event, ${t.id})" class="w-full ${isReserved ? 'bg-red-600 text-white' : 'bg-[#18181b] text-[#facc15]'} border border-amber-400/20 text-[9px] font-bold py-1 rounded uppercase tracking-wider hover:opacity-90 transition">
               ${isReserved ? 'RESERVED' : 'RESERVE'}
             </button>
           ` : `
@@ -388,7 +399,12 @@ function renderTickets() {
             <button onclick="deleteTicket(event, ${t.id})" class="w-full bg-red-700 hover:bg-red-800 text-white text-[9px] font-bold py-1 rounded uppercase tracking-wider transition">
               DELETE
             </button>
-          ` : ''}
+          ` : `
+            <button onclick="toggleUpvote(event, ${t.id})" class="w-full ${hasUpvoted ? 'bg-amber-500 text-black border-amber-600' : 'bg-black/60 text-white hover:bg-black'} border border-black/30 text-[9px] font-bold py-1 rounded uppercase tracking-wider transition flex items-center justify-center gap-1">
+              <span>SAME ISSUE</span>
+              <span class="bg-black/30 px-1 rounded text-[8px]">${upvotesList.length}</span>
+            </button>
+          `}
         </div>
       </div>
     `;
@@ -398,6 +414,31 @@ function renderTickets() {
 
 function filterTickets(cat) {
   currentCategoryFilter = cat;
+  renderTickets();
+}
+
+function toggleUpvote(e, ticketId) {
+  if (e) e.stopPropagation();
+  const user = JSON.parse(localStorage.getItem('solveit_user'));
+  if (!user) {
+    openAuthModal('signin');
+    return;
+  }
+
+  const tickets = getTickets();
+  const ticket = tickets.find(t => parseInt(t.id, 10) === parseInt(ticketId, 10));
+  if (!ticket) return;
+
+  if (!Array.isArray(ticket.upvotes)) ticket.upvotes = [];
+
+  const index = ticket.upvotes.indexOf(user.username);
+  if (index > -1) {
+    ticket.upvotes.splice(index, 1);
+  } else {
+    ticket.upvotes.push(user.username);
+  }
+
+  localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
   renderTickets();
 }
 
@@ -449,7 +490,11 @@ function openReservePlanModal(ticketId, title, issuer) {
       <p class="text-xs text-slate-400 mb-4">Write a quick plan for <span class="text-slate-200 font-bold">@${issuer}</span>:</p>
 
       <form onsubmit="submitReservePlan(event)">
-        <textarea id="reservePlanInput" required rows="3" placeholder="e.g. I can solve this using YOLOv8..." class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-400 mb-4 resize-none"></textarea>
+        <div class="flex justify-between items-center mb-1">
+          <span class="text-[10px] text-slate-500">PLAN DESCRIPTION</span>
+          <span id="planCounter" class="text-[10px] text-slate-500">0/300</span>
+        </div>
+        <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="e.g. I can solve this using YOLOv8..." class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-400 mb-4 resize-none"></textarea>
         
         <div class="flex gap-2 justify-end">
           <button type="button" onclick="closeReservePlanModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-lg transition uppercase">
@@ -464,6 +509,14 @@ function openReservePlanModal(ticketId, title, issuer) {
   `;
 
   modal.classList.remove('hidden');
+
+  const planInput = document.getElementById('reservePlanInput');
+  const planCounter = document.getElementById('planCounter');
+  if (planInput && planCounter) {
+    planInput.addEventListener('input', () => {
+      planCounter.innerText = `${planInput.value.length}/300`;
+    });
+  }
 }
 
 function closeReservePlanModal() {
@@ -528,13 +581,19 @@ function openReadmeEditorModal(ticketId) {
 
       <form onsubmit="submitReadmeDetails(event, ${ticket.id})" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">README TITLE:</label>
-          <input type="text" id="readmeTitleInput" required value="${existingReadme.title || ''}" placeholder="e.g. Astrophysics Problem Set Resource Drive" class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-400">
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-xs font-bold text-slate-300">README TITLE:</label>
+            <span id="readmeTitleCounter" class="text-[10px] text-slate-500">${(existingReadme.title || '').length}/100</span>
+          </div>
+          <input type="text" id="readmeTitleInput" required maxlength="100" value="${existingReadme.title || ''}" placeholder="e.g. Astrophysics Problem Set Resource Drive" class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-400">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">README CONTENT (Markdown / Text):</label>
-          <textarea id="readmeContentInput" required rows="6" placeholder="Describe how your solution works, setup steps, or architecture details..." class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-400 resize-none">${existingReadme.content || ''}</textarea>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-xs font-bold text-slate-300">README CONTENT (Markdown / Text):</label>
+            <span id="readmeContentCounter" class="text-[10px] text-slate-500">${(existingReadme.content || '').length}/2000</span>
+          </div>
+          <textarea id="readmeContentInput" required maxlength="2000" rows="6" placeholder="Describe how your solution works, setup steps, or architecture details..." class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-400 resize-none">${existingReadme.content || ''}</textarea>
         </div>
 
         <div>
@@ -561,6 +620,18 @@ function openReadmeEditorModal(ticketId) {
   `;
 
   modal.classList.remove('hidden');
+
+  const titleIn = document.getElementById('readmeTitleInput');
+  const titleCount = document.getElementById('readmeTitleCounter');
+  if (titleIn && titleCount) {
+    titleIn.addEventListener('input', () => titleCount.innerText = `${titleIn.value.length}/100`);
+  }
+
+  const contentIn = document.getElementById('readmeContentInput');
+  const contentCount = document.getElementById('readmeContentCounter');
+  if (contentIn && contentCount) {
+    contentIn.addEventListener('input', () => contentCount.innerText = `${contentIn.value.length}/2000`);
+  }
 }
 
 function closeReadmeEditorModal() {
@@ -708,7 +779,7 @@ function openDetailModal(id) {
                       <div class="flex justify-between items-center">
                         <span class="font-bold text-slate-300 cursor-pointer hover:underline" onclick="closeDetailModal(); openProfileModal('${s.solver}')">@${s.solver}</span>
                         <div class="flex items-center gap-2">
-                          ${isIssuer ? `
+                          ${(isIssuer && !isCommentOwner) ? `
                             <button onclick="approveSolution(${ticket.id}, ${solId})" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded transition">
                               Approve
                             </button>
@@ -751,7 +822,7 @@ function openDetailModal(id) {
           </div>
 
           <form onsubmit="submitSolution(event, ${ticket.id})" class="flex gap-2">
-            <input type="text" id="solutionInput" required placeholder="Suggest a solution or paste repo link..." class="flex-1 bg-[#09090b] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono-ticket">
+            <input type="text" id="solutionInput" required maxlength="300" placeholder="Suggest a solution or paste repo link..." class="flex-1 bg-[#09090b] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono-ticket">
             <button type="submit" class="bg-white hover:bg-slate-200 text-black font-bold px-4 py-2 rounded-lg text-xs transition">
               SEND
             </button>
@@ -775,10 +846,12 @@ function approveSolution(ticketId, solId) {
 
   if (!ticket || ticket.issuer !== user.username) return;
 
+  const sol = ticket.solutions.find((s, index) => (s.id !== undefined ? s.id : index) === solId);
+  if (sol && sol.solver === user.username) return;
+
   ticket.status = 'RESOLVED';
   ticket.approvedSolutionId = solId;
 
-  const sol = ticket.solutions.find((s, index) => (s.id !== undefined ? s.id : index) === solId);
   if (sol && sol.solver !== user.username) {
     addNotification(
       sol.solver,
@@ -959,7 +1032,7 @@ function openYourProjectsModal() {
   modal.innerHTML = `
     <div class="bg-[#121215] border border-slate-800 rounded-2xl max-w-xl w-full p-6 relative text-white shadow-2xl max-h-[85vh] overflow-y-auto">
       <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
-        <h3 class="text-xs font-bold text-slate-300 tracking-wider uppercase">YOUR PROJECTS (@${user.username})</h3>
+        <h3 class="text-xs font-bold text-slate-300 tracking-wider uppercase">YOUR PROJECTS</h3>
         <button onclick="closeYourProjectsModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
       </div>
 
@@ -1015,6 +1088,22 @@ function closeYourProjectsModal() {
 }
 
 function setupFormListeners() {
+  const titleInput = document.getElementById('ticketTitle');
+  const titleCounter = document.getElementById('titleCounter');
+  if (titleInput && titleCounter) {
+    titleInput.addEventListener('input', () => {
+      titleCounter.innerText = `${titleInput.value.length}/80`;
+    });
+  }
+
+  const descInput = document.getElementById('ticketDesc');
+  const descCounter = document.getElementById('descCounter');
+  if (descInput && descCounter) {
+    descInput.addEventListener('input', () => {
+      descCounter.innerText = `${descInput.value.length}/500`;
+    });
+  }
+
   const postForm = document.getElementById('postForm');
   if (postForm) {
     postForm.addEventListener('submit', async (e) => {
@@ -1059,7 +1148,8 @@ function setupFormListeners() {
         image: base64Image,
         approvedSolutionId: null,
         solutions: [],
-        readme: null
+        readme: null,
+        upvotes: []
       };
 
       tickets.unshift(newTicket);
@@ -1067,6 +1157,8 @@ function setupFormListeners() {
 
       closePostModal();
       postForm.reset();
+      if (titleCounter) titleCounter.innerText = '0/80';
+      if (descCounter) descCounter.innerText = '0/500';
       renderTickets();
     });
   }
