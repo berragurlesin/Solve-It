@@ -5,8 +5,8 @@
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)](#)
 
 # Solve It
-Hi everyonee, 
-A month ago, I was at an entrepreneurship camp, and we often had to find a problem to solve. That’s because one of the most important aspects of entrepreneurship is creating products that offer solutions to the problems people face in their daily lives. The biggest problem we faced, however, was that **we couldn’t find a problem to solve!** And on the one hand, there are already many people facing problems, and they, too, are looking for solutions to their problems. We kept asking people about the issues they were facing, and I thought to myself, *Why not do something about this?*
+Hi everyone, 
+a month ago, I was at an entrepreneurship camp, and we often had to find a problem to solve. That’s because one of the most important aspects of entrepreneurship is creating products that offer solutions to the problems people face in their daily lives. The biggest problem we faced, however, was that **we couldn’t find a problem to solve!** And on the one hand, there are already many people facing problems, and they, too, are looking for solutions to their problems. We kept asking people about the issues they were facing, and I thought to myself, *Why not do something about this?*
 
 ## What is the Problem and How Do We *Solve It*?
 
