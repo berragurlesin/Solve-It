@@ -16,12 +16,12 @@ This situation creates a clear disconnect. On the one hand, entrepreneurs or peo
 
 This is exactly where Solve It comes in. The platform transforms every problem within the community and in daily life into a “ticket” structure that is transparent, categorized, and highlights the level of urgency. In this way, it facilitates problem tracking by providing individuals with a dedicated space to voice their concerns, while also enabling developers, entrepreneurs, and problem solvers to publish step-by-step guides within this clean and trackable system, bringing both sides together in a structured framework.
 
-## Preview👀
+## Preview
 
 <img width="1042" height="842" alt="image" src="https://github.com/user-attachments/assets/1960c64e-19a7-463f-8905-9cf626385fc2" />
 
 <details>
-  <summary> Click to view more screenshots 🔍</summary>
+  <summary> Click to view more screenshots </summary>
 
   ### -Issue Details
  <img width="1312" height="495" alt="image" src="https://github.com/user-attachments/assets/c1b4456f-d858-4579-a4ab-1118673edcd0" />
@@ -36,7 +36,7 @@ This is exactly where Solve It comes in. The platform transforms every problem w
 
 </details>
 
-## Features💫
+## Features
 
 * **User Registration and Login:** Users can create accounts and log in.
 * **User Profiles:** The activity history of users who create tickets and publish solution guides can be viewed on their profile page.
@@ -52,17 +52,17 @@ This is exactly where Solve It comes in. The platform transforms every problem w
 * **Image Upload and In-Browser Image Optimization:** Users can attach images when publishing a problem or solution. Uploaded images are automatically resized and compressed on the browser side (using Canvas), ensuring fast loading without compromising page performance.
 * **Dynamic Comments and File Uploads:** Provides a seamless infrastructure for adding solution notes to tickets and attaching files/images in Base64 format.
 
-## Live Demo Link🔗 (so you won't have trouble finding it quickly)
+## 🔗Live Demo Link (so you won't have trouble finding it quickly)
 https://berragurlesin.github.io/Solve-It/
 
-## Tech Stack🛠️ 
+## Built With
 
 * **Frontend:** HTML5, CSS3, JavaScript (ES6+)
 * **UI & Styling:** Custom CSS Modals, Responsive Layouts
 * **Client-Side Processing:** HTML5 Canvas API (Image Optimization & Downscaling)
 * **Data & Media Handling:** Base64 Encoding for Assets and Attachments
 
-## How to Run it Locally💻 
+## How to Run it Locally 
 
 If you'd like to inspect the code or test the application locally on your computer:
 
@@ -70,13 +70,13 @@ If you'd like to inspect the code or test the application locally on your comput
 2. Open the project folder.
 3. Open `index.html` directly in any web browser (or use the *Live Server* extension in VS Code).
 
-## Notes on Logo and Concept Design🎨
+## Notes on Logo and Concept Design
 
 The platform’s visual identity and concept were shaped around the “ticket” theme rather than classic forum posts. I chose this theme to enhance the desire to use the platform aesthetically, give it a unique look, and create a format that’s easy to follow—thereby highlighting a sense of progress and ownership. The dark theme and high-contrast accent colors used in the color palette provide a modern and professional interface that is easy on the eyes.
 
 The intricate line structure between the words “Solve” and “It” in the logotype design symbolizes a problem waiting to be solved, emphasizing the app’s core vision. Similarly, those intricate lines from the logo also appear in the favicon.
 
-## Future Roadmap🎯
+## Future Roadmap
 
 Although I’ve completed the platform’s MVP phase for now, there are many features that come to mind and could be added in the future—even more than what I’ve listed here!
 
