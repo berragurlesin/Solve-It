@@ -64,7 +64,7 @@ I’ve completed the MVP for now but, there are many things that come to mind an
 * **User Guide:** I can add a user guide explaining people how to use the platform.
 * **New Ticket Design for Resolved Issues:** I want to design a new look for resolved tickets like the ones from cinemas or airplanes, actually I plan to draw the tickets from scratch.
 * **Mobile App Version:** I'm thinking about creating a mobile version of Solve It and maybe releasing it as an app.
-* **Earning Money, Scoring etc.** It would be good if users can rate the solutions, or money can be made, I need to ensure sustainability.
+* **Earning Money, Scoring etc.** It would be good if users can rate the solutions, or money can be made. I need to ensure sustainability.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) for details.
