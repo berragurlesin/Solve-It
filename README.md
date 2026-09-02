@@ -22,7 +22,7 @@ This is exactly where Solve It comes in. Solve It transforms every issue into a 
 
 ## Features
 
-**Registration and Login:** Users can create accounts and log in.
+* **Registration and Login:** Users can create accounts and log in.
 * **User Profiles:** Users activity history (their issues and solutions) can be viewed on this profile page.
 * **“My Projects” Tab:** Users can track their published issues or solution suggestions from this page.
 * **Real-Time Notifications:** Users receive notifications when a new solution is added to their ticket or a comment is posted.
