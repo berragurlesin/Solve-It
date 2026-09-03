@@ -59,10 +59,10 @@ function seedInitialData() {
   const sampleTickets = [
     {
       id: 1,
-      title: "Lack of Astrophysics Olympiad Resources for Studying",
+      title: "I can't find a resource to study for the astrophysics olympiads.",
       category: "Education",
-      description: "Preparing for the Astrophysics Olympiad, but struggling to find structured problem sets and clear, step-by-step solutions.",
-      issuer: "astro_fen",
+      description: "I'm preparing for astrophysics olympiads but couldn't find any resources. Can someone help?",
+      issuer: "astro_lover",
       reservedBy: null,
       status: "OPEN",
       urgent: true,
@@ -125,7 +125,7 @@ function checkUserSession() {
         </button>
         <button onclick="openNotificationsModal()" class="text-slate-300 hover:text-white font-bold transition cursor-pointer relative flex items-center gap-1.5">
           <span>Notifications</span>
-          ${unreadCount > 0 ? `<span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full leading-none animate-pulse">${unreadCount}</span>` : ''}
+          ${unreadCount > 0 ? `<span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full leading-none">${unreadCount}</span>` : ''}
         </button>
         <button onclick="openProfileModal('${user.username}')" class="text-slate-300 hover:text-white font-bold transition cursor-pointer rounded-full flex items-center gap-1">
           👤 @${user.username}
@@ -319,7 +319,7 @@ function renderTickets() {
 
   if (filtered.length === 0) {
     grid.innerHTML = `
-      <div class="col-span-2 text-center py-12 px-4 border border-dashed border-slate-800 rounded-2xl bg-[#121215]">
+      <div class="col-span-2 text-center py-12 px-4 border border-slate-800 rounded-xl bg-[#121215]">
         <p class="text-slate-400 font-mono-ticket text-sm mb-2">NO MATCHING TICKETS FOUND.</p>
       </div>
     `;
@@ -339,7 +339,7 @@ function renderTickets() {
       ? '✓ SOLVED & APPROVED'
       : (t.readme ? 'SOLUTION PUBLISHED' : (isReserved ? `CLAIMED BY @${t.reservedBy}` : `${(t.solutions || []).length} SOLVER(S)`));
 
-    card.className = `ticket-card ${colorClass} ${isResolved ? 'torn-ticket' : ''} flex overflow-hidden shadow-2xl transition hover:scale-[1.01] duration-200 h-64 relative`;
+    card.className = `ticket-card ${colorClass} ${isResolved ? 'torn-ticket' : ''} flex overflow-hidden transition duration-200 h-64 relative`;
 
     card.innerHTML = `
       <div class="ticket-notch-top"></div>
@@ -347,7 +347,7 @@ function renderTickets() {
 
       ${t.urgent && !isResolved ? `
         <div class="absolute top-0 left-0 z-20 overflow-hidden w-28 h-28 pointer-events-none">
-          <div class="bg-red-600 text-white font-black text-[9px] uppercase tracking-widest flex items-center justify-center shadow-md -rotate-45 -translate-x-9 translate-y-5 w-36 h-5 border-b border-red-700">
+          <div class="bg-red-600 text-white font-black text-[9px] uppercase tracking-widest flex items-center justify-center -rotate-45 -translate-x-9 translate-y-5 w-36 h-5 border-b border-red-700">
             URGENT
           </div>
         </div>
@@ -475,18 +475,18 @@ function openReservePlanModal(ticketId, title, issuer) {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'reservePlanModal';
-    modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 font-mono-ticket';
+    modal.className = 'fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 font-mono-ticket';
     document.body.appendChild(modal);
   }
 
   modal.innerHTML = `
-    <div class="bg-[#121215] border border-amber-500/30 rounded-2xl max-w-md w-full p-6 relative text-white shadow-2xl">
-      <div class="flex justify-between items-center mb-3 border-b border-slate-800 pb-3">
-        <h3 class="text-xs font-bold text-amber-400 tracking-wider uppercase">RESERVE PROJECT #${formatTicketId(ticketId)}</h3>
+    <div class="bg-[#121215] border border-slate-700 rounded-lg max-w-md w-full p-5 relative text-white">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
+        <h3 class="text-xs font-bold text-amber-400 uppercase">RESERVE PROJECT #${formatTicketId(ticketId)}</h3>
         <button onclick="closeReservePlanModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
       </div>
 
-      <h4 class="text-base font-bold font-sans text-white mb-2 leading-tight">${title}</h4>
+      <h4 class="text-sm font-bold text-white mb-2">${title}</h4>
       <p class="text-xs text-slate-400 mb-4">Write a quick plan for <span class="text-slate-200 font-bold">@${issuer}</span>:</p>
 
       <form onsubmit="submitReservePlan(event)">
@@ -494,13 +494,13 @@ function openReservePlanModal(ticketId, title, issuer) {
           <span class="text-[10px] text-slate-500">PLAN DESCRIPTION</span>
           <span id="planCounter" class="text-[10px] text-slate-500">0/300</span>
         </div>
-        <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="e.g. I can solve this using YOLOv8..." class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-amber-400 mb-4 resize-none"></textarea>
+        <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="e.g. I can solve this using YOLOv8..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-amber-400 mb-4 resize-none"></textarea>
         
         <div class="flex gap-2 justify-end">
-          <button type="button" onclick="closeReservePlanModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-lg transition uppercase">
+          <button type="button" onclick="closeReservePlanModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded transition uppercase">
             CANCEL
           </button>
-          <button type="submit" class="px-5 py-2 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded-lg transition uppercase">
+          <button type="submit" class="px-4 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded transition uppercase">
             CONFIRM RESERVATION
           </button>
         </div>
@@ -566,16 +566,16 @@ function openReadmeEditorModal(ticketId) {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'readmeEditorModal';
-    modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 font-mono-ticket';
+    modal.className = 'fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 font-mono-ticket';
     document.body.appendChild(modal);
   }
 
   const existingReadme = ticket.readme || { title: '', content: '', links: [''], image: null };
 
   modal.innerHTML = `
-    <div class="bg-[#121215] border border-emerald-500/40 rounded-2xl max-w-xl w-full p-6 relative text-white shadow-2xl max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
-        <h3 class="text-xs font-bold text-emerald-400 tracking-wider uppercase">PROJECT README & DETAILS (#${formatTicketId(ticketId)})</h3>
+    <div class="bg-[#121215] border border-slate-700 rounded-lg max-w-lg w-full p-5 relative text-white max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+        <h3 class="text-xs font-bold text-emerald-400 uppercase">PROJECT README & DETAILS (#${formatTicketId(ticketId)})</h3>
         <button onclick="closeReadmeEditorModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
       </div>
 
@@ -585,7 +585,7 @@ function openReadmeEditorModal(ticketId) {
             <label class="block text-xs font-bold text-slate-300">README TITLE:</label>
             <span id="readmeTitleCounter" class="text-[10px] text-slate-500">${(existingReadme.title || '').length}/100</span>
           </div>
-          <input type="text" id="readmeTitleInput" required maxlength="100" value="${existingReadme.title || ''}" placeholder="e.g. Astrophysics Problem Set Resource Drive" class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-400">
+          <input type="text" id="readmeTitleInput" required maxlength="100" value="${existingReadme.title || ''}" placeholder="e.g. Astrophysics Problem Set Resource Drive" class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
         </div>
 
         <div>
@@ -593,25 +593,25 @@ function openReadmeEditorModal(ticketId) {
             <label class="block text-xs font-bold text-slate-300">README CONTENT (Markdown / Text):</label>
             <span id="readmeContentCounter" class="text-[10px] text-slate-500">${(existingReadme.content || '').length}/2000</span>
           </div>
-          <textarea id="readmeContentInput" required maxlength="2000" rows="6" placeholder="Describe how your solution works, setup steps, or architecture details..." class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-400 resize-none">${existingReadme.content || ''}</textarea>
+          <textarea id="readmeContentInput" required maxlength="2000" rows="5" placeholder="Describe how your solution works, setup steps, or architecture details..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400 resize-none">${existingReadme.content || ''}</textarea>
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">RESOURCE LINK (GitHub, Drive, Video):</label>
-          <input type="url" id="readmeLinkInput" value="${(existingReadme.links && existingReadme.links[0]) || ''}" placeholder="https://..." class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-400">
+          <input type="url" id="readmeLinkInput" value="${(existingReadme.links && existingReadme.links[0]) || ''}" placeholder="https://..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-300 mb-1">ATTACH README IMAGE:</label>
-          <input type="file" id="readmeImageInput" accept="image/*" class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-2 text-xs text-slate-400 focus:outline-none focus:border-emerald-400 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-950 file:text-emerald-300 hover:file:bg-emerald-900 cursor-pointer">
+          <input type="file" id="readmeImageInput" accept="image/*" class="w-full bg-[#09090b] border border-slate-700 rounded p-2 text-xs text-slate-400 focus:outline-none focus:border-emerald-400 file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
           ${existingReadme.image ? `<p class="text-[10px] text-emerald-400 mt-1">✓ An image is already attached. Uploading a new one will replace it.</p>` : ''}
         </div>
 
         <div class="flex gap-2 justify-end pt-2">
-          <button type="button" onclick="closeReadmeEditorModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-lg transition uppercase">
+          <button type="button" onclick="closeReadmeEditorModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded transition uppercase">
             SKIP / LATER
           </button>
-          <button type="submit" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded-lg transition uppercase">
+          <button type="submit" class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded transition uppercase">
             PUBLISH README
           </button>
         </div>
@@ -699,54 +699,54 @@ function openDetailModal(id) {
   const solutionsList = ticket.solutions || [];
 
   container.innerHTML = `
-    <div class="bg-[#121215] border border-slate-800 rounded-2xl p-6 sm:p-8 relative text-white font-mono-ticket max-h-[85vh] overflow-y-auto shadow-2xl w-full">
-      <button onclick="closeDetailModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white text-lg transition">✕</button>
+    <div class="bg-[#121215] border border-slate-700 rounded-lg p-6 relative text-white font-mono-ticket max-h-[85vh] overflow-y-auto max-w-3xl mx-auto">
+      <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-base">✕</button>
 
-      <div class="flex items-center gap-2 mb-3 text-xs text-slate-400">
+      <div class="flex items-center gap-2 mb-2 text-xs text-slate-400">
         <span class="font-bold text-purple-400">#${formatTicketId(ticket.id)}</span>
         <span>•</span>
-        <span class="uppercase font-semibold text-slate-300">${ticket.category || 'OTHER'}</span>
+        <span class="uppercase text-slate-300">${ticket.category || 'OTHER'}</span>
         <span>•</span>
         ${isResolved 
           ? `<span class="text-emerald-400 font-bold">RESOLVED</span>` 
-          : (ticket.reservedBy ? `<span class="text-amber-400 font-medium">CLAIMED BY @${ticket.reservedBy}</span>` : `<span class="text-slate-500">OPEN</span>`)}
+          : (ticket.reservedBy ? `<span class="text-amber-400">CLAIMED BY @${ticket.reservedBy}</span>` : `<span class="text-slate-500">OPEN</span>`)}
       </div>
 
-      <h2 class="text-2xl font-bold mb-3 text-white tracking-tight">${ticket.title}</h2>
+      <h2 class="text-xl font-bold mb-4 text-white">${ticket.title}</h2>
       
-      <div class="text-slate-300 text-sm leading-relaxed mb-6 bg-[#09090b] p-4 rounded-xl border border-slate-800/80 space-y-4">
-        <div>${makeLinksClickable(ticket.description)}</div>
+      <div class="text-slate-200 text-sm leading-relaxed mb-6">
+        <p class="whitespace-pre-wrap">${makeLinksClickable(ticket.description)}</p>
         ${ticket.image ? `
-          <div class="pt-2 border-t border-slate-800/60">
-            <span class="text-[10px] text-slate-500 block mb-2 font-bold uppercase tracking-wider">ATTACHED IMAGE:</span>
+          <div class="mt-4">
+            <span class="text-[10px] text-slate-400 block mb-1 uppercase font-bold">ATTACHED IMAGE:</span>
             <a href="${ticket.image}" target="_blank" rel="noopener noreferrer">
-              <img src="${ticket.image}" alt="Bilet Görseli" class="max-h-64 rounded-lg border border-slate-700 object-contain hover:opacity-90 transition" />
+              <img src="${ticket.image}" alt="Ticket Image" class="max-h-64 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
             </a>
           </div>
         ` : ''}
       </div>
 
       ${isResolved ? `
-        <div class="p-5 bg-[#09090b] border border-emerald-500/30 rounded-xl">
-          <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
-            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">APPROVED SOLUTION & README</span>
-            ${ticket.readme?.author || ticket.reservedBy ? `<span class="text-[11px] text-slate-500 cursor-pointer hover:underline" onclick="closeDetailModal(); openProfileModal('${ticket.readme?.author || ticket.reservedBy}')">by @${ticket.readme?.author || ticket.reservedBy}</span>` : ''}
+        <div class="pt-4 border-t border-slate-800">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-emerald-400 uppercase">APPROVED SOLUTION & README</span>
+            ${ticket.readme?.author || ticket.reservedBy ? `<span class="text-[11px] text-slate-400 cursor-pointer hover:underline" onclick="closeDetailModal(); openProfileModal('${ticket.readme?.author || ticket.reservedBy}')">by @${ticket.readme?.author || ticket.reservedBy}</span>` : ''}
           </div>
           
           ${ticket.readme ? `
-            <div class="text-xs text-slate-200 whitespace-pre-wrap leading-relaxed mb-3">
+            <p class="text-xs text-slate-300 whitespace-pre-wrap leading-relaxed mb-3">
               ${makeLinksClickable(ticket.readme.content)}
-            </div>
+            </p>
             ${ticket.readme.image ? `
-              <div class="my-3 pt-2 border-t border-slate-800/60">
-                <span class="text-[10px] text-emerald-400 block mb-2 font-bold uppercase tracking-wider">README ATTACHMENT:</span>
+              <div class="my-3">
+                <span class="text-[10px] text-emerald-400 block mb-1 uppercase font-bold">README ATTACHMENT:</span>
                 <a href="${ticket.readme.image}" target="_blank" rel="noopener noreferrer">
-                  <img src="${ticket.readme.image}" alt="Readme Visual" class="max-h-64 rounded-lg border border-slate-700 object-contain hover:opacity-90 transition" />
+                  <img src="${ticket.readme.image}" alt="Readme Visual" class="max-h-64 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
                 </a>
               </div>
             ` : ''}
             ${(ticket.readme.links && ticket.readme.links.length > 0) ? `
-              <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-800/60">
+              <div class="flex flex-wrap gap-2 mt-2">
                 ${ticket.readme.links.map(l => `
                   <a href="${l}" target="_blank" rel="noopener noreferrer" class="text-xs text-purple-400 hover:text-purple-300 underline inline-flex items-center gap-1">
                     ${l} ↗
@@ -759,28 +759,28 @@ function openDetailModal(id) {
           `}
         </div>
       ` : `
-        <div class="border-t border-slate-800/80 pt-5">
+        <div class="border-t border-slate-800 pt-4">
           <div class="flex justify-between items-center mb-3">
-            <span class="text-xs font-bold text-slate-400 tracking-wider uppercase">SOLUTIONS & COMMENTS (${solutionsList.length})</span>
+            <span class="text-xs font-bold text-slate-400 uppercase">SOLUTIONS & COMMENTS (${solutionsList.length})</span>
             <button onclick="openReadmeEditorModal(${ticket.id})" class="text-xs text-purple-400 hover:text-purple-300 font-bold underline">
               + Attach Readme / Link
             </button>
           </div>
 
-          <div class="space-y-3 mb-5 max-h-60 overflow-y-auto pr-1">
+          <div class="space-y-3 mb-4 max-h-56 overflow-y-auto pr-1">
             ${solutionsList.length === 0
-              ? `<p class="text-xs text-slate-600 italic py-2">No solutions or comments submitted yet.</p>`
+              ? `<p class="text-xs text-slate-500 italic py-1">No solutions or comments submitted yet.</p>`
               : solutionsList.map((s, index) => {
                   const solId = s.id !== undefined ? s.id : index;
                   const isCommentOwner = user && user.username === s.solver;
 
                   return `
-                    <div class="p-3.5 bg-[#09090b] border border-slate-800 rounded-lg text-xs space-y-2">
+                    <div class="pb-3 border-b border-slate-800/80 text-xs space-y-1">
                       <div class="flex justify-between items-center">
                         <span class="font-bold text-slate-300 cursor-pointer hover:underline" onclick="closeDetailModal(); openProfileModal('${s.solver}')">@${s.solver}</span>
                         <div class="flex items-center gap-2">
                           ${(isIssuer && !isCommentOwner) ? `
-                            <button onclick="approveSolution(${ticket.id}, ${solId})" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded transition">
+                            <button onclick="approveSolution(${ticket.id}, ${solId})" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2 py-0.5 rounded transition">
                               Approve
                             </button>
                           ` : ''}
@@ -792,21 +792,21 @@ function openDetailModal(id) {
                         </div>
                       </div>
 
-                      <div class="text-slate-400 leading-relaxed">${makeLinksClickable(s.text)}</div>
+                      <p class="text-slate-300 leading-relaxed">${makeLinksClickable(s.text)}</p>
 
                       ${ticket.readme && (ticket.readme.author === s.solver || ticket.reservedBy === s.solver) ? `
-                        <div class="mt-2 pt-2 border-t border-slate-800/60 text-slate-300 bg-slate-900/40 p-2.5 rounded">
-                          <span class="text-[10px] font-bold text-purple-400 block mb-1">ATTACHED README:</span>
+                        <div class="mt-2 pt-2 border-t border-slate-800 text-slate-300">
+                          <span class="text-[10px] font-bold text-purple-400 block mb-0.5">ATTACHED README:</span>
                           <p class="text-[11px] whitespace-pre-wrap">${makeLinksClickable(ticket.readme.content)}</p>
                           ${ticket.readme.image ? `
                             <div class="mt-2">
                               <a href="${ticket.readme.image}" target="_blank" rel="noopener noreferrer">
-                                <img src="${ticket.readme.image}" alt="Readme Görseli" class="max-h-48 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
+                                <img src="${ticket.readme.image}" alt="Readme Visual" class="max-h-48 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
                               </a>
                             </div>
                           ` : ''}
                           ${(ticket.readme.links && ticket.readme.links.length > 0) ? `
-                            <div class="flex flex-wrap gap-2 mt-2">
+                            <div class="flex flex-wrap gap-2 mt-1">
                               ${ticket.readme.links.map(l => `
                                 <a href="${l}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-purple-400 underline">
                                   ${l} ↗
@@ -822,8 +822,8 @@ function openDetailModal(id) {
           </div>
 
           <form onsubmit="submitSolution(event, ${ticket.id})" class="flex gap-2">
-            <input type="text" id="solutionInput" required maxlength="300" placeholder="Suggest a solution or paste repo link..." class="flex-1 bg-[#09090b] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono-ticket">
-            <button type="submit" class="bg-white hover:bg-slate-200 text-black font-bold px-4 py-2 rounded-lg text-xs transition">
+            <input type="text" id="solutionInput" required maxlength="300" placeholder="Suggest a solution or paste repo link..." class="flex-1 bg-[#09090b] border border-slate-700 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono-ticket">
+            <button type="submit" class="bg-white hover:bg-slate-200 text-black font-bold px-4 py-2 rounded text-xs transition">
               SEND
             </button>
           </form>
@@ -956,7 +956,7 @@ function openNotificationsModal() {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'notificationsModal';
-    modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 font-mono-ticket';
+    modal.className = 'fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 font-mono-ticket';
     document.body.appendChild(modal);
   }
 
@@ -967,17 +967,17 @@ function openNotificationsModal() {
   checkUserSession();
 
   modal.innerHTML = `
-    <div class="bg-[#121215] border border-slate-800 rounded-2xl max-w-lg w-full p-6 relative text-white shadow-2xl">
-      <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
-        <h3 class="text-xs font-bold text-slate-300 tracking-wider uppercase">NOTIFICATIONS (${notifs.length})</h3>
+    <div class="bg-[#121215] border border-slate-700 rounded-lg max-w-md w-full p-5 relative text-white">
+      <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
+        <h3 class="text-xs font-bold text-slate-300 uppercase">NOTIFICATIONS (${notifs.length})</h3>
         <button onclick="closeNotificationsModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
       </div>
 
-      <div class="space-y-3 max-h-80 overflow-y-auto mb-4">
+      <div class="space-y-2 max-h-72 overflow-y-auto mb-4">
         ${notifs.length === 0 ? `
           <p class="text-xs text-slate-500 text-center py-6">No notifications found.</p>
         ` : notifs.map(n => `
-          <div onclick="closeNotificationsModal(); openDetailModal(${n.ticketId})" class="p-3 bg-[#09090b] border border-slate-800 rounded-xl cursor-pointer hover:border-slate-600 transition">
+          <div onclick="closeNotificationsModal(); openDetailModal(${n.ticketId})" class="p-2.5 bg-[#09090b] border border-slate-800 rounded cursor-pointer hover:border-slate-600 transition">
             <p class="text-xs text-slate-200 mb-1">${n.message}</p>
             <span class="text-[10px] text-slate-500">${n.timestamp}</span>
           </div>
@@ -986,7 +986,7 @@ function openNotificationsModal() {
 
       ${notifs.length > 0 ? `
         <div class="flex justify-end">
-          <button onclick="clearNotifications()" class="text-xs bg-red-950/80 border border-red-800 text-red-300 hover:bg-red-900 font-bold px-3 py-1.5 rounded-lg transition uppercase">
+          <button onclick="clearNotifications()" class="text-xs text-red-400 hover:text-red-300 font-bold transition uppercase">
             Clear All
           </button>
         </div>
@@ -1021,7 +1021,7 @@ function openYourProjectsModal() {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'yourProjectsModal';
-    modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 font-mono-ticket';
+    modal.className = 'fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 font-mono-ticket';
     document.body.appendChild(modal);
   }
 
@@ -1030,26 +1030,26 @@ function openYourProjectsModal() {
   const myReserved = tickets.filter(t => t.reservedBy === user.username);
 
   modal.innerHTML = `
-    <div class="bg-[#121215] border border-slate-800 rounded-2xl max-w-xl w-full p-6 relative text-white shadow-2xl max-h-[85vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
-        <h3 class="text-xs font-bold text-slate-300 tracking-wider uppercase">YOUR PROJECTS</h3>
+    <div class="bg-[#121215] border border-slate-700 rounded-lg max-w-lg w-full p-5 relative text-white max-h-[85vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+        <h3 class="text-xs font-bold text-slate-300 uppercase">YOUR PROJECTS</h3>
         <button onclick="closeYourProjectsModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
       </div>
 
-      <div class="space-y-6">
+      <div class="space-y-5">
         <div>
-          <h4 class="text-xs font-bold text-amber-400 mb-2 uppercase tracking-wider">ISSUED BY YOU (${myIssued.length})</h4>
+          <h4 class="text-xs font-bold text-amber-400 mb-2 uppercase">ISSUED BY YOU (${myIssued.length})</h4>
           <div class="space-y-2">
             ${myIssued.length === 0 ? '<p class="text-xs text-slate-500">No projects issued yet.</p>' : myIssued.map(t => `
-              <div class="p-3 bg-[#09090b] border border-slate-800 rounded-xl flex justify-between items-center text-xs">
+              <div class="p-2.5 bg-[#09090b] border border-slate-800 rounded flex justify-between items-center text-xs">
                 <div>
                   <span class="text-slate-400 font-bold">#${formatTicketId(t.id)}</span>
                   <span class="font-bold text-slate-200 ml-2">${t.title}</span>
-                  ${t.status === 'RESOLVED' ? '<span class="ml-2 text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-1.5 py-0.2 rounded">RESOLVED</span>' : ''}
+                  ${t.status === 'RESOLVED' ? '<span class="ml-2 text-[10px] text-emerald-400 font-bold">RESOLVED</span>' : ''}
                 </div>
                 <div class="flex gap-2">
-                  <button onclick="closeYourProjectsModal(); openDetailModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Inspect</button>
-                  <button onclick="deleteTicket(null, ${t.id}); openYourProjectsModal();" class="bg-red-950 border border-red-800 text-red-300 hover:bg-red-900 px-2 py-1 rounded text-[10px] font-bold uppercase">Delete</button>
+                  <button onclick="closeYourProjectsModal(); openDetailModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded text-[10px] font-bold uppercase">Inspect</button>
+                  <button onclick="deleteTicket(null, ${t.id}); openYourProjectsModal();" class="text-red-400 hover:text-red-300 px-1 py-1 text-[10px] font-bold uppercase">Delete</button>
                 </div>
               </div>
             `).join('')}
@@ -1057,18 +1057,18 @@ function openYourProjectsModal() {
         </div>
 
         <div>
-          <h4 class="text-xs font-bold text-emerald-400 mb-2 uppercase tracking-wider">RESERVED BY YOU (${myReserved.length})</h4>
+          <h4 class="text-xs font-bold text-emerald-400 mb-2 uppercase">RESERVED BY YOU (${myReserved.length})</h4>
           <div class="space-y-2">
             ${myReserved.length === 0 ? '<p class="text-xs text-slate-500">No projects reserved yet.</p>' : myReserved.map(t => `
-              <div class="p-3 bg-[#09090b] border border-slate-800 rounded-xl flex justify-between items-center text-xs">
+              <div class="p-2.5 bg-[#09090b] border border-slate-800 rounded flex justify-between items-center text-xs">
                 <div>
                   <span class="text-slate-400 font-bold">#${formatTicketId(t.id)}</span>
                   <span class="font-bold text-slate-200 ml-2">${t.title}</span>
                 </div>
                 <div class="flex gap-2">
-                  <button onclick="closeYourProjectsModal(); openDetailModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 px-2 py-1 rounded text-[10px] font-bold uppercase">Inspect</button>
+                  <button onclick="closeYourProjectsModal(); openDetailModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded text-[10px] font-bold uppercase">Inspect</button>
                   ${t.status !== 'RESOLVED' ? `
-                    <button onclick="closeYourProjectsModal(); openReadmeEditorModal(${t.id})" class="bg-emerald-950 border border-emerald-800 text-emerald-300 hover:bg-emerald-900 px-2 py-1 rounded text-[10px] font-bold uppercase">Edit Readme</button>
+                    <button onclick="closeYourProjectsModal(); openReadmeEditorModal(${t.id})" class="text-emerald-400 hover:text-emerald-300 px-1 py-1 text-[10px] font-bold uppercase">Edit Readme</button>
                   ` : ''}
                 </div>
               </div>
@@ -1211,9 +1211,9 @@ function openProfileModal(username) {
     issuesContainer.innerHTML = `<p class="text-xs text-slate-500 font-mono-ticket py-4 text-center">// NO ISSUES PUBLISHED YET</p>`;
   } else {
     issuesContainer.innerHTML = userTickets.map(t => `
-      <div onclick="closeProfileModal(); openDetailModal(${t.id})" class="p-3 bg-[#09090b] border border-slate-800 rounded-xl hover:border-purple-500/50 transition cursor-pointer flex justify-between items-center">
+      <div onclick="closeProfileModal(); openDetailModal(${t.id})" class="p-2.5 bg-[#09090b] border border-slate-800 rounded hover:border-purple-500/50 transition cursor-pointer flex justify-between items-center">
         <div>
-          <span class="text-[10px] font-mono-ticket text-purple-400 border border-purple-500/30 px-2 py-0.5 rounded">${t.category}</span>
+          <span class="text-[10px] font-mono-ticket text-purple-400 border border-purple-500/30 px-1.5 py-0.5 rounded">${t.category}</span>
           <h4 class="text-sm font-bold text-white font-mono-ticket mt-1">${t.title}</h4>
         </div>
         <span class="text-xs font-mono-ticket text-slate-500">${t.status === 'RESOLVED' ? '✅ SOLVED' : '🔓 OPEN'}</span>
@@ -1226,7 +1226,7 @@ function openProfileModal(username) {
     solutionsContainer.innerHTML = `<p class="text-xs text-slate-500 font-mono-ticket py-4 text-center">// NO SOLUTIONS SUBMITTED YET</p>`;
   } else {
     solutionsContainer.innerHTML = userSolutions.map(s => `
-      <div onclick="closeProfileModal(); openDetailModal(${s.ticketId})" class="p-3 bg-[#09090b] border border-slate-800 rounded-xl hover:border-emerald-500/50 transition cursor-pointer">
+      <div onclick="closeProfileModal(); openDetailModal(${s.ticketId})" class="p-2.5 bg-[#09090b] border border-slate-800 rounded hover:border-emerald-500/50 transition cursor-pointer">
         <span class="text-[10px] font-mono-ticket text-slate-400">// ON TICKET: <strong class="text-white">${s.ticketTitle}</strong></span>
         <p class="text-xs text-slate-300 font-mono-ticket mt-1 line-clamp-2">"${s.solutionText}"</p>
       </div>
