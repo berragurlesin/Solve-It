@@ -10,36 +10,35 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between relative overflow-x-hidden bg-[#09090b] text-white font-sans">
 
-  <nav class="max-w-7xl w-full mx-auto p-6 flex justify-between items-center border-b border-slate-800/60">
+  <nav class="max-w-7xl w-full mx-auto p-6 flex justify-between items-center">
     <a href="#" class="flex items-center gap-2 hover:opacity-80 transition">
-      <img src="./assets/logoduz.png" alt="Solve It" class="nav-logo" />
-      <span class="text-xs text-purple-400 font-normal font-mono-ticket">[PASS #2026]</span>
+      <img src="assets/logoduz.png" alt="Solve It" class="nav-logo" />
     </a>
 
     <div id="navAuthArea" class="flex items-center gap-3">
       <button onclick="openAuthModal('signin')" class="text-sm text-slate-300 hover:text-white px-4 py-2 font-mono-ticket">Sign In</button>
-      <button onclick="openAuthModal('signup')" class="text-sm bg-white text-black font-bold px-5 py-2.5 rounded-full hover:bg-slate-200 transition font-mono-ticket">Sign Up</button>
+      <button onclick="openAuthModal('signup')" class="text-sm bg-white text-black font-bold px-5 py-2 rounded-full hover:bg-slate-200 transition font-mono-ticket">Sign Up</button>
     </div>
   </nav>
 
   <header class="max-w-7xl w-full mx-auto px-4 py-10 text-center">
-    <img src="./assets/logo.png" alt="Solve It" class="hero-logo" />
+    <img src="assets/logo.png" alt="Solve It" class="hero-logo" />
     <p class="text-slate-400 text-lg max-w-lg mx-auto font-mono-ticket mb-8">
-      // CLAIM A TICKET. FIND THE SOLUTION.
+      WHERE PROBLEMS MEET SOLUTIONS.
     </p>
 
    <div class="flex flex-wrap justify-center items-center gap-2 mb-6">
-  <button onclick="filterTickets('all')" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full border border-slate-700 bg-slate-900 text-white hover:border-purple-500 transition">ALL TICKETS</button>
-  <button onclick="filterTickets('urgent')" id="filterUrgent" class="filter-btn text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-red-600 text-white hover:bg-red-500 transition shrink-0 animate-pulse shadow-[0_0_12px_rgba(239,68,68,0.5)]">URGENT</button>
-  <button onclick="filterTickets('most_voted')" id="filterMostVoted" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-amber-400 text-black hover:bg-amber-300 transition">MOST VOTED</button>
-  <button onclick="filterTickets('Education')" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-[#4ade80] text-black hover:opacity-90 transition">EDUCATION</button>
-  <button onclick="filterTickets('Software')" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-[#c084fc] text-black hover:opacity-90 transition">SOFTWARE</button>
-  <button onclick="filterTickets('Technology')" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-[#38bdf8] text-black hover:opacity-90 transition">TECHNOLOGY</button>
-  <button onclick="filterTickets('Transportation')" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-[#facc15] text-black hover:opacity-90 transition">TRANSPORTATION</button>
-  <button onclick="filterTickets('Community')" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-[#fb923c] text-black hover:opacity-90 transition">COMMUNITY</button>
-  <button onclick="filterTickets('Other')" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-[#94a3b8] text-black hover:opacity-90 transition">OTHER</button>
-  <button onclick="filterTickets('resolved')" class="text-xs font-mono-ticket font-bold px-5 py-2.5 rounded-full bg-emerald-600 text-white hover:bg-emerald-500 transition">SOLVED TICKETS</button>
-</div>
+      <button onclick="filterTickets('all')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full border border-slate-700 bg-slate-900 text-white hover:border-purple-500 transition">ALL TICKETS</button>
+      <button onclick="filterTickets('urgent')" id="filterUrgent" class="filter-btn text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-500 transition shrink-0 animate-pulse shadow-[0_0_12px_rgba(239,68,68,0.5)]">URGENT</button>
+      <button onclick="filterTickets('most_voted')" id="filterMostVoted" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-amber-400 text-black hover:bg-amber-300 transition">MOST VOTED</button>
+      <button onclick="filterTickets('Education')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#4ade80] text-black hover:opacity-90 transition">EDUCATION</button>
+      <button onclick="filterTickets('Software')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#c084fc] text-black hover:opacity-90 transition">SOFTWARE</button>
+      <button onclick="filterTickets('Technology')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#38bdf8] text-black hover:opacity-90 transition">TECHNOLOGY</button>
+      <button onclick="filterTickets('Transportation')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#facc15] text-black hover:opacity-90 transition">TRANSPORTATION</button>
+      <button onclick="filterTickets('Community')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#fb923c] text-black hover:opacity-90 transition">COMMUNITY</button>
+      <button onclick="filterTickets('Other')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#94a3b8] text-black hover:opacity-90 transition">OTHER</button>
+      <button onclick="filterTickets('resolved')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-emerald-600 text-white hover:bg-emerald-500 transition">SOLVED TICKETS</button>
+    </div>
 
     <div class="max-w-xl mx-auto relative">
       <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
@@ -52,41 +51,41 @@
         id="searchInput" 
         oninput="handleSearch()"
         placeholder="Search tickets..." 
-        class="w-full bg-[#121215] border border-slate-800 text-white pl-11 pr-4 py-3.5 rounded-2xl text-sm font-mono-ticket focus:outline-none focus:border-purple-500 transition shadow-inner placeholder-slate-500"
+        class="w-full bg-[#121215] border border-slate-800 text-white pl-11 pr-4 py-3 rounded-xl text-sm font-mono-ticket focus:outline-none focus:border-purple-500 transition placeholder-slate-500"
       >
     </div>
   </header>
 
   <main class="max-w-5xl w-full mx-auto px-4 mb-16">
-    <div class="flex justify-between items-center mb-6 pb-2 border-b border-slate-800/60">
-      <span class="text-xs font-mono-ticket text-slate-500 tracking-wider">AVAILABLE PASSES</span>
-      <button onclick="openPostModal()" class="bg-[#a855f7] hover:bg-purple-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition uppercase tracking-wider font-mono-ticket">
-        + Issue New Ticket
+    <div class="flex justify-between items-center mb-6">
+      <span class="text-xs font-mono-ticket text-slate-500 tracking-wider">ALL PROBLEMS</span>
+      <button onclick="openPostModal()" class="bg-[#a855f7] hover:bg-purple-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition uppercase font-mono-ticket">
+        + New Ticket
       </button>
     </div>
 
     <div id="ticketGrid" class="grid gap-6 md:grid-cols-2"></div>
   </main>
 
-  <div id="authModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-[#121215] border border-slate-800 w-full max-w-sm p-6 rounded-2xl relative">
-      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+  <div id="authModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="bg-[#121215] border border-slate-700 w-full max-w-sm p-5 rounded-lg relative">
+      <button onclick="closeAuthModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">✕</button>
       
-      <h2 id="authModalTitle" class="text-xl font-bold text-white mb-2 font-mono-ticket">SIGN IN</h2>
+      <h2 id="authModalTitle" class="text-lg font-bold text-white mb-3 font-mono-ticket">SIGN IN</h2>
       <p id="authErrorMsg" class="hidden text-xs text-red-400 font-mono-ticket mb-3 bg-red-950/50 p-2 rounded border border-red-800"></p>
       
-      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3">
         <div>
           <label class="block text-xs font-mono-ticket text-slate-400 mb-1">USERNAME</label>
-          <input type="text" id="authUsername" required maxlength="20" placeholder="e.g. dev_user" class="w-full bg-[#09090b] border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-purple-500 font-mono-ticket">
+          <input type="text" id="authUsername" required maxlength="20" placeholder="e.g. dev_user" class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-white text-xs focus:outline-none focus:border-purple-500 font-mono-ticket">
         </div>
 
         <div>
           <label class="block text-xs font-mono-ticket text-slate-400 mb-1">PASSWORD</label>
-          <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-[#09090b] border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-purple-500 font-mono-ticket">
+          <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-white text-xs focus:outline-none focus:border-purple-500 font-mono-ticket">
         </div>
 
-        <button type="submit" id="authSubmitBtn" class="w-full bg-white text-black font-bold py-3 rounded-lg text-sm hover:bg-slate-200 transition font-mono-ticket uppercase">
+        <button type="submit" id="authSubmitBtn" class="w-full bg-white text-black font-bold py-2.5 rounded text-xs hover:bg-slate-200 transition font-mono-ticket uppercase">
           CONTINUE
         </button>
       </form>
@@ -98,22 +97,22 @@
     </div>
   </div>
 
-  <div id="postModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-[#121215] border border-slate-800 w-full max-w-lg p-6 rounded-2xl relative">
-      <button onclick="closePostModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
-      <h2 class="text-xl font-bold text-white mb-4 font-mono-ticket">ISSUE PROBLEM TICKET</h2>
-      <form id="postForm" class="space-y-4">
+  <div id="postModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="bg-[#121215] border border-slate-700 w-full max-w-lg p-5 rounded-lg relative">
+      <button onclick="closePostModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white">✕</button>
+      <h2 class="text-lg font-bold text-white mb-3 font-mono-ticket">ISSUE PROBLEM TICKET</h2>
+      <form id="postForm" class="space-y-3">
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="block text-xs font-mono-ticket text-slate-400">TICKET TITLE</label>
             <span id="titleCounter" class="text-[10px] font-mono-ticket text-slate-500">0/80</span>
           </div>
-          <input type="text" id="ticketTitle" required maxlength="80" class="w-full bg-[#09090b] border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-purple-500 font-mono-ticket">
+          <input type="text" id="ticketTitle" required maxlength="80" class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-white text-xs focus:outline-none focus:border-purple-500 font-mono-ticket">
         </div>
         
         <div>
           <label class="block text-xs font-mono-ticket text-slate-400 mb-1">CATEGORY</label>
-          <select id="ticketCategory" class="w-full bg-[#09090b] border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-purple-500 font-mono-ticket">
+          <select id="ticketCategory" class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-white text-xs focus:outline-none focus:border-purple-500 font-mono-ticket">
             <option value="Education">Education</option>
             <option value="Software">Software</option>
             <option value="Technology">Technology</option>
@@ -125,7 +124,7 @@
 
         <div>
           <label class="block text-xs font-mono-ticket text-slate-400 mb-1">ATTACH IMAGE (OPTIONAL)</label>
-          <input type="file" id="ticketImage" accept="image/*" class="w-full bg-[#09090b] border border-slate-700 rounded-xl p-2 text-xs text-white file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-mono-ticket file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 font-mono-ticket" />
+          <input type="file" id="ticketImage" accept="image/*" class="w-full bg-[#09090b] border border-slate-700 rounded p-2 text-xs text-white file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-mono-ticket file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 font-mono-ticket" />
         </div>
 
         <div>
@@ -133,7 +132,7 @@
             <label class="block text-xs font-mono-ticket text-slate-400">PROBLEM DESCRIPTION</label>
             <span id="descCounter" class="text-[10px] font-mono-ticket text-slate-500">0/500</span>
           </div>
-          <textarea id="ticketDesc" rows="3" required maxlength="500" class="w-full bg-[#09090b] border border-slate-800 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-purple-500 font-mono-ticket"></textarea>
+          <textarea id="ticketDesc" rows="3" required maxlength="500" class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-white text-xs focus:outline-none focus:border-purple-500 font-mono-ticket"></textarea>
         </div>
 
         <div class="flex items-center gap-2 pt-1 pb-1">
@@ -141,29 +140,29 @@
           <label for="ticketUrgent" class="text-xs font-mono-ticket text-red-400 font-bold cursor-pointer select-none">MARK AS URGENT ISSUE (Please check this box only in cases of true urgency)</label>
         </div>
 
-        <button type="submit" class="w-full bg-white text-black font-bold py-3 rounded-lg text-sm hover:bg-slate-200 transition font-mono-ticket">PRINT TICKET</button>
+        <button type="submit" class="w-full bg-white text-black font-bold py-2.5 rounded text-xs hover:bg-slate-200 transition font-mono-ticket">PRINT TICKET</button>
       </form>
     </div>
   </div>
 
-  <div id="detailModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div id="detailCardContainer" class="w-full max-w-5xl"></div>
+  <div id="detailModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div id="detailCardContainer" class="w-full max-w-3xl"></div>
   </div>
 
-  <div id="profileModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-[#121215] border border-slate-800 w-full max-w-2xl p-6 rounded-2xl relative max-h-[85vh] overflow-y-auto">
-      <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">✕</button>
+  <div id="profileModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
+    <div class="bg-[#121215] border border-slate-700 w-full max-w-xl p-5 rounded-lg relative max-h-[85vh] overflow-y-auto">
+      <button onclick="closeProfileModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white text-base">✕</button>
       
-      <div class="flex items-center gap-4 mb-6 pb-4 border-b border-slate-800">
-        <div class="w-14 h-14 rounded-full bg-purple-600/30 border border-purple-500/50 flex items-center justify-center text-purple-300 font-bold text-xl font-mono-ticket">
+      <div class="flex items-center gap-3 mb-5 pb-3 border-b border-slate-800">
+        <div class="w-10 h-10 rounded-full bg-purple-600/30 border border-purple-500/50 flex items-center justify-center text-purple-300 font-bold text-lg font-mono-ticket">
           <span id="profileAvatar">U</span>
         </div>
         <div>
-          <h2 id="profileUsername" class="text-xl font-bold text-white font-mono-ticket">@username</h2>
+          <h2 id="profileUsername" class="text-lg font-bold text-white font-mono-ticket">@username</h2>
         </div>
       </div>
 
-      <div class="flex gap-4 mb-4 border-b border-slate-800/60 pb-2">
+      <div class="flex gap-4 mb-3 border-b border-slate-800 pb-2">
         <button onclick="switchProfileTab('issues')" id="tabBtnIssues" class="text-xs font-mono-ticket font-bold text-purple-400 border-b-2 border-purple-500 pb-1">
           ISSUES CREATED (<span id="countIssues">0</span>)
         </button>
@@ -172,8 +171,8 @@
         </button>
       </div>
 
-      <div id="profileIssuesList" class="space-y-3"></div>
-      <div id="profileSolutionsList" class="space-y-3 hidden"></div>
+      <div id="profileIssuesList" class="space-y-2"></div>
+      <div id="profileSolutionsList" class="space-y-2 hidden"></div>
     </div>
   </div>
 
