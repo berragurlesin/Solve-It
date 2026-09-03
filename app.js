@@ -56,43 +56,10 @@ function formatTicketId(id) {
 }
 
 function seedInitialData() {
-  const sampleTickets = [
-    {
-      id: 1,
-      title: "I can't find a resource to study for the astrophysics olympiads.",
-      category: "Education",
-      description: "I'm preparing for astrophysics olympiads but couldn't find any resources. Can someone help?",
-      issuer: "astro_lover",
-      reservedBy: null,
-      status: "OPEN",
-      urgent: true,
-      image: null,
-      approvedSolutionId: null,
-      solutions: [],
-      readme: null,
-      upvotes: []
-    },
-    {
-      id: 2,
-      title: "Difficulty Finding Teammates for Projects & Competitions",
-      category: "Community",
-      description: "Looking for teammates who match my skill set, vision, and work ethic for technical competitions and hackathons.",
-      issuer: "maker_06",
-      reservedBy: null,
-      status: "OPEN",
-      urgent: false,
-      image: null,
-      approvedSolutionId: null,
-      solutions: [],
-      readme: null,
-      upvotes: []
-    }
-  ];
-
-  const existingTickets = JSON.parse(localStorage.getItem('solveit_tickets'));
-  if (!existingTickets || existingTickets.length === 0) {
-    localStorage.setItem('solveit_tickets', JSON.stringify(sampleTickets));
+  if (localStorage.getItem('solveit_tickets') === null) {
+    localStorage.setItem('solveit_tickets', JSON.stringify([]));
   } else {
+    const existingTickets = JSON.parse(localStorage.getItem('solveit_tickets')) || [];
     const updated = existingTickets.map(t => ({
       ...t,
       status: t.status || 'OPEN',
@@ -319,8 +286,7 @@ function renderTickets() {
 
   if (filtered.length === 0) {
     grid.innerHTML = `
-      <div class="col-span-2 text-center py-12 px-4 border border-slate-800 rounded-xl bg-[#121215]">
-        <p class="text-slate-400 font-mono-ticket text-sm mb-2">NO MATCHING TICKETS FOUND.</p>
+        <p class="text-slate-400 font-mono-ticket text-sm mb-2">NO TICKETS FOUND.</p>
       </div>
     `;
     return;
