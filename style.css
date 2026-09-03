@@ -1,9 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap');
-
-.font-mono-ticket {
-  font-family: 'JetBrains Mono', monospace;
-}
-
 .ticket-card {
   position: relative;
   border-radius: 1rem;
