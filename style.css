@@ -89,7 +89,7 @@
     currentColor,
     currentColor 2px,
     transparent 2px,
-    transparent 5px
+    transparent 4px
   );
 }
 
@@ -140,7 +140,6 @@
   transform: rotate(6deg) translate(9px, 4px) !important;
 }
 
-/* Modallardaki iç arka plan ve çizgi temizlikleri */
 .modal-body .description-box,
 .modal-body .issue-description,
 .modal-body .inner-card,
