@@ -1,48 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap');
 
-* {
-  box-sizing: border-box;
-  scrollbar-width: thin;
-  scrollbar-color: #27272a #09090b;
-}
-
 .font-mono-ticket {
   font-family: 'JetBrains Mono', monospace;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #09090b;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 9999px;
-  border: 2px solid #09090b;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #c084fc;
-}
-
-.nav-logo {
-  display: block;
-  height: 28px;
-  width: auto;
-}
-.hero-logo {
-  display: block;
-  width: 700px;
-  max-width: 90%;
-  height: auto;
-  margin: 0 auto;
-}
-
 .ticket-card {
   position: relative;
-  border-radius: 1.25rem;
+  border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
   font-family: 'JetBrains Mono', monospace;
@@ -53,7 +17,7 @@
 .ticket-card > div:first-child,
 .ticket-main-section {
   flex: 1 1 0% !important;
-  min-width: 0 !important;
+  min-width: 0 !important; 
   overflow: hidden !important;
 }
 
@@ -63,12 +27,6 @@
   flex-shrink: 0 !important;
 }
 
-.ticket-card h1,
-.ticket-card h2,
-.ticket-card h3,
-.ticket-card h4,
-.ticket-card p,
-.ticket-card span,
 .ticket-title {
   overflow-wrap: anywhere !important;
   word-break: break-all !important;
@@ -77,9 +35,20 @@
 
 .ticket-description {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 3; 
   -webkit-box-orient: vertical;
   overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-all !important;
+  white-space: normal !important;
+}
+
+.ticket-card h1,
+.ticket-card h2,
+.ticket-card h3,
+.ticket-card h4,
+.ticket-card p,
+.ticket-card span {
   overflow-wrap: anywhere !important;
   word-break: break-all !important;
   white-space: normal !important;
@@ -127,7 +96,7 @@
 .torn-ticket {
   opacity: 0.82;
   filter: grayscale(25%);
-  position: relative;
+  position: relative; 
 }
 
 .torn-ticket::before {
@@ -135,7 +104,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  right: 8rem;
+  right: 8rem; 
   width: 3px;
   background-image: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.8) 50%);
   background-size: 100% 12px;
@@ -171,88 +140,79 @@
   transform: rotate(6deg) translate(9px, 4px) !important;
 }
 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-  padding: 16px;
-}
-
-.modal-content,
-#ticketDetailModal > div,
-div[id*="Modal"] > div {
-  background-color: #0c0c0e !important;
+/* Modallardaki iç arka plan ve çizgi temizlikleri */
+.modal-body .description-box,
+.modal-body .issue-description,
+.modal-body .inner-card,
+.modal-content .card-wrapper,
+[class*="modal"] .bg-zinc-900\/50,
+[class*="modal"] .bg-black\/40,
+[class*="modal"] .bg-zinc-950 {
+  background-color: transparent !important;
   border: none !important;
-  outline: none !important;
   box-shadow: none !important;
-  border-radius: 16px !important;
-  width: 100% !important;
-  max-width: 650px !important;
-  padding: 28px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  color: #f4f4f5 !important;
-  position: relative !important;
 }
 
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  font-size: 20px;
-  color: #a1a1aa;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  transition: color 0.2s;
-}
-
-.close-btn:hover {
-  color: #ffffff;
-}
-
-#ticketDetailModal p,
-.modal-content p,
-.modal-content div[class*="border"],
-.modal-content div[class*="bg-zinc"],
-.modal-content div[class*="bg-black"] {
+.issue-description,
+.modal-description-text,
+.modal-body p.description {
   background: transparent !important;
   border: none !important;
-  box-shadow: none !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
-  margin-top: 12px !important;
-  margin-bottom: 24px !important;
-  color: #d4d4d8 !important;
-  font-size: 0.95rem !important;
-  line-height: 1.6 !important;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+  color: #e4e4e7 !important;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
-.modal-content input,
-.modal-content textarea,
-.modal-content select {
-  width: 100%;
-  background-color: #09090b !important;
+.modal-comments-section,
+.solutions-comments-header,
+[class*="comment"] {
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.solutions-comments-header,
+.modal-body .comments-container,
+.modal-body .solutions-section {
+  border-top: 1px solid #27272a !important; 
+  padding-top: 1.25rem !important;
+  margin-top: 1.25rem !important;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content input[type="email"],
+.modal-content textarea {
+  background-color: rgba(24, 24, 27, 0.8) !important;
   border: 1px solid #27272a !important;
-  border-radius: 8px !important;
+  border-radius: 0.5rem !important; 
   color: #f4f4f5 !important;
-  padding: 12px 14px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 0.875rem !important;
 }
 
 .modal-content input:focus,
 .modal-content textarea:focus {
+  border-color: #a1a1aa !important;
   outline: none !important;
-  border-color: #c084fc !important;
 }
 
-.modal-content button {
-  font-family: 'JetBrains Mono', monospace !important;
+.modal-body .comment-box,
+.modal-body .attached-readme {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
+
+.nav-logo { display: block; height: 28px; width: auto; }
+.hero-logo { display: block; width: 700px; max-width: 90%; height: auto; margin: 0 auto; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #09090b; }
+::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
