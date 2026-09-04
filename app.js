@@ -1,3 +1,13 @@
+(function cleanupOldCache() {
+  const CACHE_KEY = "solveit_clean_v1"; 
+
+  if (!localStorage.getItem(CACHE_KEY)) {
+    localStorage.clear(); 
+    localStorage.setItem(CACHE_KEY, "done"); 
+    console.log("problem needs to be solved");
+  }
+})();
+
 let currentCategoryFilter = 'all';
 let searchQuery = '';
 let currentAuthMode = 'signin';
