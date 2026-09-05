@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 .font-mono-ticket {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Nunito', sans-serif;
 }
 
 .ticket-card {
@@ -9,7 +9,7 @@
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Nunito', sans-serif;
   display: flex !important;
   width: 100% !important;
 }
@@ -164,7 +164,7 @@
   border: 1px solid #26262b;
   border-radius: 3px 3px 16px 3px;
   box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.7);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Nunito', sans-serif;
 }
 
 .ticket-modal-close {
@@ -198,7 +198,7 @@
   border-bottom: 2px solid #3f3f46;
   border-radius: 3px;
   color: #f4f4f5;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Nunito', sans-serif;
   transition: border-color 0.15s ease;
 }
 
