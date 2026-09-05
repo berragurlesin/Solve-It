@@ -360,7 +360,7 @@ function renderTickets() {
       </div>
 
       <div class="w-32 p-3 flex flex-col justify-between items-center bg-black/10 text-center z-10 relative">
-        <span class="text-[9px] font-bold tracking-widest opacity-70">${isResolved ? 'USED STUB' : 'ADMIT ONE'}</span>
+
         
         <div class="w-full h-8 barcode-lines opacity-80 my-1"></div>
         
