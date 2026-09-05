@@ -200,6 +200,7 @@
   color: #f4f4f5;
   font-family: 'Nunito', sans-serif;
   transition: border-color 0.15s ease;
+  caret-color: transparent;
 }
 
 .ticket-field:focus {
