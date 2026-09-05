@@ -1,181 +1,309 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOLVE IT</title>
-  <link rel="icon" type="image/png" href="assets/favicon.png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body class="min-h-screen flex flex-col justify-between relative overflow-x-hidden bg-[#09090b] text-white font-sans">
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap');
 
-  <nav class="max-w-7xl w-full mx-auto p-6 flex justify-between items-center">
-    <a href="#" class="flex items-center gap-2 hover:opacity-80 transition">
-      <img src="assets/logoduz.png" alt="Solve It" class="nav-logo" />
-    </a>
+.font-mono-ticket {
+  font-family: 'JetBrains Mono', monospace;
+}
 
-    <div id="navAuthArea" class="flex items-center gap-3">
-      <button onclick="openAuthModal('signin')" class="text-sm text-slate-300 hover:text-white px-4 py-2 font-mono-ticket">Sign In</button>
-      <button onclick="openAuthModal('signup')" class="text-sm bg-white text-black font-bold px-5 py-2 rounded-full hover:bg-slate-200 transition font-mono-ticket">Sign Up</button>
-    </div>
-  </nav>
+.ticket-card {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  font-family: 'JetBrains Mono', monospace;
+  display: flex !important;
+  width: 100% !important;
+}
 
-  <header class="max-w-7xl w-full mx-auto px-4 py-10 text-center">
-    <img src="assets/logo.png" alt="Solve It" class="hero-logo" />
-    <p class="text-slate-400 text-lg max-w-lg mx-auto font-mono-ticket mb-8">
-      WHERE PROBLEMS MEET SOLUTIONS.
-    </p>
+.ticket-card > div:first-child,
+.ticket-main-section {
+  flex: 1 1 0% !important;
+  min-width: 0 !important; 
+  overflow: hidden !important;
+}
 
-   <div class="flex flex-wrap justify-center items-center gap-2 mb-6">
-      <button onclick="filterTickets('all')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full border border-slate-700 bg-[#4f5b8c] text-black transition">ALL TICKETS</button>
-      <button onclick="filterTickets('urgent')" id="filterUrgent" class="filter-btn text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#c21047] text-black hover:bg-red-500 transition shrink-0 filter-urgent">URGENT</button>
-      <button onclick="filterTickets('most_voted')" id="filterMostVoted" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#d9fb60] text-black hover:bg-amber-300 transition">MOST VOTED</button>
-      <button onclick="filterTickets('Education')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#aacc96] text-black hover:opacity-90 transition">EDUCATION</button>
-      <button onclick="filterTickets('Software')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#ab92bf] text-black hover:opacity-90 transition">SOFTWARE</button>
-      <button onclick="filterTickets('Technology')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#ff7bac] text-black hover:opacity-90 transition">TECHNOLOGY</button>
-      <button onclick="filterTickets('Transportation')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#efce7b] text-black hover:opacity-90 transition">TRANSPORTATION</button>
-      <button onclick="filterTickets('Community')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#ef6f3c] text-black hover:opacity-90 transition">COMMUNITY</button>
-      <button onclick="filterTickets('Other')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-[#52a5ce] text-black hover:opacity-90 transition">OTHER</button>
-      <button onclick="filterTickets('resolved')" class="text-xs font-mono-ticket font-bold px-4 py-2 rounded-full bg-emerald-500 text-black hover:bg-[#008471] transition">SOLVED TICKETS</button>
-    </div>
+.ticket-card > div:last-child,
+.ticket-stub-section {
+  width: 120px !important;
+  flex-shrink: 0 !important;
+}
 
-    <div class="max-w-xl mx-auto relative">
-      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-      </div>
-      <input 
-        type="text" 
-        id="searchInput" 
-        oninput="handleSearch()"
-        placeholder="Search tickets..." 
-        class="ticket-field w-full pl-11 pr-4 py-3 text-sm"
-      >
-    </div>
-  </header>
+.ticket-title {
+  overflow-wrap: anywhere !important;
+  word-break: break-all !important;
+  white-space: normal !important;
+}
 
-  <main class="max-w-5xl w-full mx-auto px-4 mb-16">
-    <div class="flex justify-between items-center mb-6">
-      <span class="text-xs font-mono-ticket text-slate-500 tracking-wider">ALL PROBLEMS</span>
-      <button onclick="openPostModal()" class="bg-[#fefefe] hover:bg-[#f2f1fa] text-black text-xs font-bold px-4 py-2 rounded-lg transition uppercase font-mono-ticket">
-        + New Ticket
-      </button>
-    </div>
+.ticket-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-all !important;
+  white-space: normal !important;
+}
 
-    <div id="ticketGrid" class="grid gap-6 md:grid-cols-2"></div>
-  </main>
+.ticket-card h1,
+.ticket-card h2,
+.ticket-card h3,
+.ticket-card h4,
+.ticket-card p,
+.ticket-card span {
+  overflow-wrap: anywhere !important;
+  word-break: break-all !important;
+  white-space: normal !important;
+}
 
-  <div id="authModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="ticket-modal ticket-modal--neutral w-full max-w-sm p-5 relative">
-      <button onclick="closeAuthModal()" class="ticket-modal-close">✕</button>
-      
-      <h2 id="authModalTitle" class="text-lg font-bold text-white mb-3 font-mono-ticket ticket-modal-title">SIGN IN</h2>
-      <p id="authErrorMsg" class="hidden text-xs text-red-400 font-mono-ticket mb-3 bg-red-950/50 p-2 rounded border border-red-800"></p>
-      
-      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-mono-ticket text-slate-400 mb-1">USERNAME</label>
-          <input type="text" id="authUsername" required maxlength="20" placeholder="e.g. dev_user" class="ticket-field w-full p-2.5 text-xs">
-        </div>
+.ticket-education { background-color: #aacc96; color: #052e16; }
+.ticket-software { background-color: #ab92bf; color: #2e2013; }
+.ticket-technology { background-color: #ff7bac; color: #0c4a6e; }
+.ticket-transportation { background-color: #efce7b; color: #422006; }
+.ticket-community { background-color: #ef6f3c; color: #431407; }
+.ticket-other { background-color: #52a5ce; color: #0f172a; }
 
-        <div>
-          <label class="block text-xs font-mono-ticket text-slate-400 mb-1">PASSWORD</label>
-          <input type="password" id="authPassword" required placeholder="••••••••" class="ticket-field w-full p-2.5 text-xs">
-        </div>
+.ticket-notch-top {
+  position: absolute;
+  top: -10px;
+  right: 120px;
+  width: 20px;
+  height: 20px;
+  background-color: #09090b;
+  border-radius: 50%;
+  z-index: 20;
+}
 
-        <button type="submit" id="authSubmitBtn" class="w-full bg-white text-black font-bold py-2.5 rounded text-xs hover:bg-slate-200 transition font-mono-ticket uppercase">
-          CONTINUE
-        </button>
-      </form>
+.ticket-notch-bottom {
+  position: absolute;
+  bottom: -10px;
+  right: 120px;
+  width: 20px;
+  height: 20px;
+  background-color: #09090b;
+  border-radius: 50%;
+  z-index: 20;
+}
 
-      <div class="mt-4 pt-3 border-t border-dashed border-slate-800 text-center font-mono-ticket text-xs text-slate-400">
-        <span id="authSwitchText">Don't have an account?</span>
-        <button id="authSwitchBtn" type="button" onclick="switchAuthMode()" class="text-amber-400 underline font-bold ml-1">Sign Up</button>
-      </div>
-    </div>
-  </div>
+.barcode-lines {
+  background: repeating-linear-gradient(
+    90deg,
+    currentColor,
+    currentColor 2px,
+    transparent 2px,
+    transparent 4px
+  );
+}
 
-  <div id="postModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="ticket-modal ticket-modal--neutral w-full max-w-lg p-5 relative">
-      <button onclick="closePostModal()" class="ticket-modal-close">✕</button>
-      <h2 class="text-lg font-bold text-white mb-3 font-mono-ticket ticket-modal-title">ISSUE PROBLEM TICKET</h2>
-      <form id="postForm" class="space-y-3">
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <label class="block text-xs font-mono-ticket text-slate-400">TICKET TITLE</label>
-            <span id="titleCounter" class="text-[10px] font-mono-ticket text-slate-500">0/80</span>
-          </div>
-          <input type="text" id="ticketTitle" required maxlength="80" class="ticket-field w-full p-2.5 text-xs">
-        </div>
-        
-        <div>
-          <label class="block text-xs font-mono-ticket text-slate-400 mb-1">CATEGORY</label>
-          <select id="ticketCategory" class="ticket-field w-full p-2.5 text-xs">
-            <option value="Education">Education</option>
-            <option value="Software">Software</option>
-            <option value="Technology">Technology</option>
-            <option value="Transportation">Transportation</option>
-            <option value="Community">Community</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
+.torn-ticket {
+  opacity: 0.82;
+  filter: grayscale(25%);
+  position: relative; 
+}
 
-        <div>
-          <label class="block text-xs font-mono-ticket text-slate-400 mb-1">ATTACH IMAGE (OPTIONAL)</label>
-          <input type="file" id="ticketImage" accept="image/*" class="ticket-field w-full p-2 text-xs text-white file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-mono-ticket file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700" />
-        </div>
+.torn-ticket::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 8rem; 
+  width: 3px;
+  background-image: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.8) 50%);
+  background-size: 100% 12px;
+  z-index: 20;
+}
 
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <label class="block text-xs font-mono-ticket text-slate-400">PROBLEM DESCRIPTION</label>
-            <span id="descCounter" class="text-[10px] font-mono-ticket text-slate-500">0/500</span>
-          </div>
-          <textarea id="ticketDesc" rows="3" required maxlength="500" class="ticket-field w-full p-2.5 text-xs"></textarea>
-        </div>
+.torn-ticket .barcode-lines {
+  opacity: 0.3 !important;
+}
 
-        <div class="flex items-center gap-2 pt-1 pb-1">
-          <input type="checkbox" id="ticketUrgent" class="w-4 h-4 accent-red-500 rounded cursor-pointer">
-          <label for="ticketUrgent" class="text-xs font-mono-ticket text-red-400 font-bold cursor-pointer select-none">MARK AS URGENT ISSUE (Please check this box only in cases of true urgency)</label>
-        </div>
+.ticket-torn-divider {
+  position: relative;
+  width: 14px;
+  height: 100%;
+  background-color: transparent;
+  background-image: radial-gradient(circle at 50% 10px, transparent 6px, #121215 7px);
+  background-size: 14px 20px;
+  background-repeat: repeat-y;
+  z-index: 20;
+  margin-left: -7px;
+  margin-right: -7px;
+}
 
-        <button type="submit" class="w-full bg-white text-black font-bold py-2.5 rounded text-xs hover:bg-slate-200 transition font-mono-ticket">PRINT TICKET</button>
-      </form>
-    </div>
-  </div>
+.torn-stub {
+  transform: rotate(4deg) translate(6px, 2px) !important;
+  box-shadow: -4px 6px 15px rgba(0, 0, 0, 0.4);
+  filter: brightness(0.85);
+  border-left: 2px dashed rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.3s ease;
+}
 
-  <div id="detailModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div id="detailCardContainer" class="w-full max-w-3xl"></div>
-  </div>
+.ticket-card:hover .torn-stub {
+  transform: rotate(6deg) translate(9px, 4px) !important;
+}
 
-  <div id="profileModal" class="hidden fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
-    <div class="ticket-modal ticket-modal--neutral w-full max-w-xl p-5 relative max-h-[85vh] overflow-y-auto">
-      <button onclick="closeProfileModal()" class="ticket-modal-close">✕</button>
-      
-      <div class="flex items-center gap-3 mb-5 pb-3 border-b border-dashed border-slate-800">
-        <div class="w-10 h-10 rounded-full bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-amber-300 font-bold text-lg font-mono-ticket">
-          <span id="profileAvatar">U</span>
-        </div>
-        <div>
-          <h2 id="profileUsername" class="text-lg font-bold text-white font-mono-ticket">@username</h2>
-        </div>
-      </div>
+.filter-urgent {
+  animation: urgentBlink 1.8s ease-in-out infinite;
+}
 
-      <div class="flex gap-4 mb-3 border-b border-dashed border-slate-800 pb-2">
-        <button onclick="switchProfileTab('issues')" id="tabBtnIssues" class="text-xs font-mono-ticket font-bold text-amber-300 border-b-2 border-amber-400 pb-1">
-          ISSUES CREATED (<span id="countIssues">0</span>)
-        </button>
-        <button onclick="switchProfileTab('solutions')" id="tabBtnSolutions" class="text-xs font-mono-ticket font-bold text-slate-400 hover:text-slate-200 pb-1">
-          SOLUTIONS PROVIDED (<span id="countSolutions">0</span>)
-        </button>
-      </div>
+@keyframes urgentBlink {
+  0%, 100% { background-color: #dc2626; }
+  50% { background-color: #ef4444; }
+}
 
-      <div id="profileIssuesList" class="space-y-2"></div>
-      <div id="profileSolutionsList" class="space-y-2 hidden"></div>
-    </div>
-  </div>
+/* ==========================================================================
+   TICKET-STYLE MODAL SYSTEM
+   Replaces the generic "rounded-lg + slate border + purple accent" card
+   that every popup/box shared, with something that matches the site's own
+   admit-one/ticket-stub identity: sharp top edge, uneven radius, a colored
+   accent stripe per context, dashed dividers and a faint paper grain
+   instead of a flat glass panel.
+   ========================================================================== */
 
-  <script src="app.js?v=2"></script>
-</body>
-</html>
+.ticket-modal {
+  position: relative;
+  background-color: #131316;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(165deg, #17171b 0%, #101012 100%);
+  border: 1px solid #26262b;
+  border-top: 3px solid var(--ticket-accent, #71717a);
+  border-radius: 3px 3px 16px 3px;
+  box-shadow: 0 25px 50px -15px rgba(0, 0, 0, 0.7);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.ticket-modal--neutral { --ticket-accent: #a1a1aa; }
+.ticket-modal--amber   { --ticket-accent: #facc15; }
+.ticket-modal--emerald { --ticket-accent: #34d399; }
+.ticket-modal--red     { --ticket-accent: #f87171; }
+
+.ticket-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a1a1aa;
+  border: 1px solid #27272a;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.ticket-modal-close:hover {
+  color: #f4f4f5;
+  border-color: #52525b;
+}
+
+.ticket-modal-title {
+  padding-right: 2rem;
+}
+
+/* Form fields inside ticket-modals: squared corners, underline-style focus
+   using the modal's own accent color instead of the generic purple ring. */
+.ticket-field {
+  background-color: #09090b;
+  border: 1px solid #27272a;
+  border-bottom: 2px solid #3f3f46;
+  border-radius: 3px;
+  color: #f4f4f5;
+  font-family: 'JetBrains Mono', monospace;
+  transition: border-color 0.15s ease;
+}
+
+.ticket-field:focus {
+  outline: none;
+  border-color: #3f3f46;
+  border-bottom-color: #facc15;
+}
+
+.ticket-field--amber:focus { border-bottom-color: #facc15; }
+.ticket-field--emerald:focus { border-bottom-color: #34d399; }
+
+.ticket-field::placeholder {
+  color: #52525b;
+}
+
+.modal-body .description-box,
+.modal-body .issue-description,
+.modal-body .inner-card,
+.modal-content .card-wrapper,
+[class*="modal"] .bg-zinc-900\/50,
+[class*="modal"] .bg-black\/40,
+[class*="modal"] .bg-zinc-950 {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.issue-description,
+.modal-description-text,
+.modal-body p.description {
+  background: transparent !important;
+  border: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+  color: #e4e4e7 !important;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.modal-comments-section,
+.solutions-comments-header,
+[class*="comment"] {
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.solutions-comments-header,
+.modal-body .comments-container,
+.modal-body .solutions-section {
+  border-top: 1px solid #27272a !important; 
+  padding-top: 1.25rem !important;
+  margin-top: 1.25rem !important;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content input[type="email"],
+.modal-content textarea {
+  background-color: rgba(24, 24, 27, 0.8) !important;
+  border: 1px solid #27272a !important;
+  border-radius: 0.5rem !important; 
+  color: #f4f4f5 !important;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  border-color: #a1a1aa !important;
+  outline: none !important;
+}
+
+.modal-body .comment-box,
+.modal-body .attached-readme {
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.nav-logo { display: block; height: 28px; width: auto; }
+.hero-logo { display: block; width: 700px; max-width: 90%; height: auto; margin: 0 auto; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #09090b; }
+::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
