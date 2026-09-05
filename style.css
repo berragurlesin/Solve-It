@@ -149,15 +149,6 @@
   50% { background-color: #ef4444; }
 }
 
-/* ==========================================================================
-   TICKET-STYLE MODAL SYSTEM
-   Replaces the generic "rounded-lg + slate border + purple accent" card
-   that every popup/box shared, with something that matches the site's own
-   admit-one/ticket-stub identity: sharp top edge, uneven radius, a colored
-   accent stripe per context, dashed dividers and a faint paper grain
-   instead of a flat glass panel.
-   ========================================================================== */
-
 .ticket-modal {
   position: relative;
   background-color: #131316;
@@ -207,8 +198,6 @@
   padding-right: 2rem;
 }
 
-/* Form fields inside ticket-modals: squared corners, underline-style focus
-   using the modal's own accent color instead of the generic purple ring. */
 .ticket-field {
   background-color: #09090b;
   border: 1px solid #27272a;
