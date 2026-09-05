@@ -697,13 +697,13 @@ function openDetailModal(id) {
       <button onclick="closeDetailModal()" class="ticket-modal-close">✕</button>
 
       <div class="flex items-center gap-2 mb-2 text-xs text-slate-400">
-        <span class="font-bold text-amber-400">#${formatTicketId(ticket.id)}</span>
+        <span class="font-bold text-slate-200">#${formatTicketId(ticket.id)}</span>
         <span>•</span>
         <span class="uppercase text-slate-300">${ticket.category || 'OTHER'}</span>
         <span>•</span>
         ${isResolved 
           ? `<span class="text-emerald-400 font-bold">RESOLVED</span>` 
-          : (ticket.reservedBy === ticket.issuer ? '' : (ticket.reservedBy ? `<span class="text-amber-400">CLAIMED BY @${ticket.reservedBy}</span>` : `<span class="text-slate-500">OPEN</span>`))}
+          : (ticket.reservedBy === ticket.issuer ? '' : (ticket.reservedBy ? `<span class="text-slate-200">CLAIMED BY @${ticket.reservedBy}</span>` : `<span class="text-slate-500">OPEN</span>`))}
       </div>
 
       <h2 class="text-xl font-bold mb-4 text-white">${ticket.title}</h2>
@@ -742,7 +742,7 @@ function openDetailModal(id) {
             ${(ticket.readme.links && ticket.readme.links.length > 0) ? `
               <div class="flex flex-wrap gap-2 mt-2">
                 ${ticket.readme.links.map(l => `
-                  <a href="${l}" target="_blank" rel="noopener noreferrer" class="text-xs text-amber-400 hover:text-amber-300 underline inline-flex items-center gap-1">
+                  <a href="${l}" target="_blank" rel="noopener noreferrer" class="text-xs text-white hover:text-slate-300 underline inline-flex items-center gap-1">
                     ${l} ↗
                   </a>
                 `).join('')}
@@ -756,7 +756,7 @@ function openDetailModal(id) {
         <div class="border-t border-dashed border-slate-800 pt-4">
           <div class="flex justify-between items-center mb-3">
             <span class="text-xs font-bold text-slate-400 uppercase">SOLUTIONS & COMMENTS (${solutionsList.length})</span>
-            <button onclick="openReadmeEditorModal(${ticket.id})" class="text-xs text-amber-400 hover:text-amber-300 font-bold underline">
+            <button onclick="openReadmeEditorModal(${ticket.id})" class="text-xs text-white hover:text-slate-300 font-bold underline">
               + Attach Readme / Link
             </button>
           </div>
@@ -790,7 +790,7 @@ function openDetailModal(id) {
 
                       ${ticket.readme && (ticket.readme.author === s.solver || ticket.reservedBy === s.solver) ? `
                         <div class="mt-2 pt-2 border-t border-slate-800 text-slate-300">
-                          <span class="text-[10px] font-bold text-amber-400 block mb-0.5">ATTACHED README:</span>
+                          <span class="text-[10px] font-bold text-white block mb-0.5">ATTACHED README:</span>
                           <p class="text-[11px] whitespace-pre-wrap">${makeLinksClickable(ticket.readme.content)}</p>
                           ${ticket.readme.image ? `
                             <div class="mt-2">
@@ -802,7 +802,7 @@ function openDetailModal(id) {
                           ${(ticket.readme.links && ticket.readme.links.length > 0) ? `
                             <div class="flex flex-wrap gap-2 mt-1">
                               ${ticket.readme.links.map(l => `
-                                <a href="${l}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-amber-400 underline">
+                                <a href="${l}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-white underline">
                                   ${l} ↗
                                 </a>
                               `).join('')}
