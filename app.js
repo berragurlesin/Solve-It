@@ -321,7 +321,7 @@ function renderTickets() {
 
     const statusText = isResolved
        ? 'APPROVED SOLUTION'
-       : (t.readme ? 'SOLUTION PUBLISHED' : (isSelfClaimed ? '' : (isReserved ? `APPROVED BY @${t.reservedBy}` : `${(t.solutions || []).length} SOLVER(S)`)));
+       : (t.readme ? 'SOLUTION PUBLISHED' : (isSelfClaimed ? '' : (isReserved ? `APPROVED BY @${t.reservedBy}` : `${(t.solutions || []).length} SOLVER`)));
 
     card.className = `ticket-card ${colorClass} ${isResolved ? 'torn-ticket' : ''} flex overflow-hidden transition duration-200 h-64 relative`;
 
