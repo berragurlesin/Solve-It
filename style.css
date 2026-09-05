@@ -54,12 +54,12 @@
   white-space: normal !important;
 }
 
-.ticket-education { background-color: #8a9a5b; color: #052e16; }
-.ticket-software { background-color: #9c8465; color: #2e2013; }
-.ticket-technology { background-color: #6b8f9e; color: #0c4a6e; }
-.ticket-transportation { background-color: #c9a24b; color: #422006; }
-.ticket-community { background-color: #b5714a; color: #431407; }
-.ticket-other { background-color: #8c8578; color: #0f172a; }
+.ticket-education { background-color: #aacc96; color: #052e16; }
+.ticket-software { background-color: #876029; color: #2e2013; }
+.ticket-technology { background-color: #ff7bac; color: #0c4a6e; }
+.ticket-transportation { background-color: #efce7b; color: #422006; }
+.ticket-community { background-color: #ef6f3c; color: #431407; }
+.ticket-other { background-color: #52a5ce; color: #0f172a; }
 
 .ticket-notch-top {
   position: absolute;
