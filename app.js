@@ -476,7 +476,7 @@ function openReservePlanModal(ticketId, title, issuer) {
       <form onsubmit="submitReservePlan(event)">
         <div class="flex justify-between items-center mb-1">
           <span class="text-[10px] text-slate-500">DESCRIPTION</span>
-          <span id="planCounter" class="text-[10px] text-slate-500">0/300</span>
+          <span id="planCounter" class="hidden text-[10px] text-slate-500">0/300</span>
         </div>
         <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="explain how you plan to solve this issue..." class="ticket-field ticket-field--amber w-full p-2.5 text-xs mb-4 resize-none"></textarea>
         
@@ -567,7 +567,7 @@ function openReadmeEditorModal(ticketId) {
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="block text-xs font-bold text-slate-300">TITLE:</label>
-            <span id="readmeTitleCounter" class="text-[10px] text-slate-500">${(existingReadme.title || '').length}/100</span>
+            <span id="readmeTitleCounter" class="hidden text-[10px] text-slate-500">${(existingReadme.title || '').length}/100</span>
           </div>
           <input type="text" id="readmeTitleInput" required maxlength="100" value="${existingReadme.title || ''}" placeholder="write a title for your solution.." class="ticket-field ticket-field--emerald w-full p-2.5 text-xs">
         </div>
@@ -575,7 +575,7 @@ function openReadmeEditorModal(ticketId) {
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="block text-xs font-bold text-slate-300">DETAILS:</label>
-            <span id="readmeContentCounter" class="text-[10px] text-slate-500">${(existingReadme.content || '').length}/2000</span>
+            <span id="readmeContentCounter" class="hidden text-[10px] text-slate-500">${(existingReadme.content || '').length}/2000</span>
           </div>
           <textarea id="readmeContentInput" required maxlength="2000" rows="5" placeholder="what did you build, how it works and anything else you'd like to add..." class="ticket-field ticket-field--emerald w-full p-2.5 text-xs resize-none">${existingReadme.content || ''}</textarea>
         </div>
