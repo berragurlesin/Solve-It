@@ -13,12 +13,18 @@ let searchQuery = '';
 let currentAuthMode = 'signin';
 let activeReservingTicketId = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   seedInitialData();
   checkUserSession();
   renderTickets();
   setupFormListeners();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 function compressAndConvertToBase64(file, maxWidth = 800, quality = 0.7) {
   return new Promise((resolve, reject) => {
