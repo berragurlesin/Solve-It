@@ -18,7 +18,8 @@ This is exactly where Solve It comes in. Solve It transforms every issue into a 
 
 ## Preview
 
-<img width="1042" height="842" alt="image" src="https://github.com/user-attachments/assets/1960c64e-19a7-463f-8905-9cf626385fc2" />
+<img width="1207" height="846" alt="image" src="https://github.com/user-attachments/assets/16a799b8-3bd1-4620-aa1e-63fb47d68042" />
+
 
 ## Features
 
