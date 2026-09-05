@@ -1192,7 +1192,7 @@ function openProfileModal(username) {
           <span class="text-[10px] font-mono-ticket text-purple-400 border border-purple-500/30 px-1.5 py-0.5 rounded">${t.category}</span>
           <h4 class="text-sm font-bold text-white font-mono-ticket mt-1">${t.title}</h4>
         </div>
-        <span class="text-xs font-mono-ticket text-slate-500">${t.status === 'RESOLVED' ? '✅ SOLVED' : '🔓 OPEN'}</span>
+        <span class="text-xs font-mono-ticket text-slate-500">${t.status === 'RESOLVED' ? 'SOLVED' : 'OPEN'}</span>
       </div>
     `).join('');
   }
