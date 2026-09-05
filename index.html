@@ -6,8 +6,13 @@
   <title>SOLVE IT</title>
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" id="mainStyle">
 </head>
+  <script>
+  document.getElementById('mainStyle').href = 'style.css?v=' + Date.now();
+</script>
+<script src="app.js"></script>
+  
 <body class="min-h-screen flex flex-col justify-between relative overflow-x-hidden bg-[#09090b] text-white font-sans">
 
   <nav class="max-w-7xl w-full mx-auto p-6 flex justify-between items-center">
