@@ -181,7 +181,7 @@ function handleAuthSubmit(e) {
   if (currentAuthMode === 'signup') {
     if (usersDb[username]) {
       if (errorMsg) {
-        errorMsg.innerText = 'Username already taken. Try signing in.';
+        errorMsg.innerText = 'Ooops, this username seems to be taken by someone else. Try something unique!';
         errorMsg.classList.remove('hidden');
       }
       return;
@@ -195,14 +195,14 @@ function handleAuthSubmit(e) {
   } else {
     if (!usersDb[username]) {
       if (errorMsg) {
-        errorMsg.innerText = 'User not found. Please sign up first.';
+        errorMsg.innerText = 'We could not find you around here, try creating an account first.';
         errorMsg.classList.remove('hidden');
       }
       return;
     }
     if (usersDb[username] !== password) {
       if (errorMsg) {
-        errorMsg.innerText = 'Incorrect password.';
+        errorMsg.innerText = 'Incorrect password:(';
         errorMsg.classList.remove('hidden');
       }
       return;
@@ -311,9 +311,11 @@ function renderTickets() {
     const upvotesList = t.upvotes || [];
     const hasUpvoted = user && upvotesList.includes(user.username);
 
+    const isSelfClaimed = isReserved && t.reservedBy === t.issuer;
+
     const statusText = isResolved
-      ? '✓ SOLVED & APPROVED'
-      : (t.readme ? 'SOLUTION PUBLISHED' : (isReserved ? `CLAIMED BY @${t.reservedBy}` : `${(t.solutions || []).length} SOLVER(S)`));
+       ? 'APPROVED SOLUTION'
+       : (t.readme ? 'SOLUTION PUBLISHED' : (isSelfClaimed ? '' : (isReserved ? `APPROVED BY @${t.reservedBy}` : `${(t.solutions || []).length} SOLVER(S)`)));
 
     card.className = `ticket-card ${colorClass} ${isResolved ? 'torn-ticket' : ''} flex overflow-hidden transition duration-200 h-64 relative`;
 
@@ -458,7 +460,7 @@ function openReservePlanModal(ticketId, title, issuer) {
   modal.innerHTML = `
     <div class="bg-[#121215] border border-slate-700 rounded-lg max-w-md w-full p-5 relative text-white">
       <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
-        <h3 class="text-xs font-bold text-amber-400 uppercase">RESERVE PROJECT #${formatTicketId(ticketId)}</h3>
+        <h3 class="text-xs font-bold text-amber-400 uppercase">RESERVE TICKET#${formatTicketId(ticketId)}</h3>
         <button onclick="closeReservePlanModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
       </div>
 
@@ -467,17 +469,17 @@ function openReservePlanModal(ticketId, title, issuer) {
 
       <form onsubmit="submitReservePlan(event)">
         <div class="flex justify-between items-center mb-1">
-          <span class="text-[10px] text-slate-500">PLAN DESCRIPTION</span>
+          <span class="text-[10px] text-slate-500">DESCRIPTION</span>
           <span id="planCounter" class="text-[10px] text-slate-500">0/300</span>
         </div>
-        <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="e.g. I can solve this using YOLOv8..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-amber-400 mb-4 resize-none"></textarea>
+        <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="explain how you plan to solve this issue..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-amber-400 mb-4 resize-none"></textarea>
         
         <div class="flex gap-2 justify-end">
           <button type="button" onclick="closeReservePlanModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded transition uppercase">
             CANCEL
           </button>
           <button type="submit" class="px-4 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded transition uppercase">
-            CONFIRM RESERVATION
+            RESERVE THIS TICKET
           </button>
         </div>
       </form>
@@ -551,44 +553,44 @@ function openReadmeEditorModal(ticketId) {
   modal.innerHTML = `
     <div class="bg-[#121215] border border-slate-700 rounded-lg max-w-lg w-full p-5 relative text-white max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
-        <h3 class="text-xs font-bold text-emerald-400 uppercase">PROJECT README & DETAILS (#${formatTicketId(ticketId)})</h3>
+        <h3 class="text-xs font-bold text-emerald-400 uppercase">SOLUTION DETAILS & README (#${formatTicketId(ticketId)})</h3>
         <button onclick="closeReadmeEditorModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
       </div>
 
       <form onsubmit="submitReadmeDetails(event, ${ticket.id})" class="space-y-4">
         <div>
           <div class="flex justify-between items-center mb-1">
-            <label class="block text-xs font-bold text-slate-300">README TITLE:</label>
+            <label class="block text-xs font-bold text-slate-300">TITLE:</label>
             <span id="readmeTitleCounter" class="text-[10px] text-slate-500">${(existingReadme.title || '').length}/100</span>
           </div>
-          <input type="text" id="readmeTitleInput" required maxlength="100" value="${existingReadme.title || ''}" placeholder="e.g. Astrophysics Problem Set Resource Drive" class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
+          <input type="text" id="readmeTitleInput" required maxlength="100" value="${existingReadme.title || ''}" placeholder="write a title for your solution.." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
         </div>
 
         <div>
           <div class="flex justify-between items-center mb-1">
-            <label class="block text-xs font-bold text-slate-300">README CONTENT (Markdown / Text):</label>
+            <label class="block text-xs font-bold text-slate-300">DETAILS:</label>
             <span id="readmeContentCounter" class="text-[10px] text-slate-500">${(existingReadme.content || '').length}/2000</span>
           </div>
-          <textarea id="readmeContentInput" required maxlength="2000" rows="5" placeholder="Describe how your solution works, setup steps, or architecture details..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400 resize-none">${existingReadme.content || ''}</textarea>
+          <textarea id="readmeContentInput" required maxlength="2000" rows="5" placeholder="what did you build, how it works and anything else you'd like to add..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400 resize-none">${existingReadme.content || ''}</textarea>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">RESOURCE LINK (GitHub, Drive, Video):</label>
-          <input type="url" id="readmeLinkInput" value="${(existingReadme.links && existingReadme.links[0]) || ''}" placeholder="https://..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
+          <label class="block text-xs font-bold text-slate-300 mb-1">LINKS (GitHub, Drive, Video):</label>
+          <input type="url" id="readmeLinkInput" value="${(existingReadme.links && existingReadme.links[0]) || ''}" placeholder="your link here..." class="w-full bg-[#09090b] border border-slate-700 rounded p-2.5 text-xs text-white focus:outline-none focus:border-emerald-400">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">ATTACH README IMAGE:</label>
+          <label class="block text-xs font-bold text-slate-300 mb-1">ATTACH IMAGE:</label>
           <input type="file" id="readmeImageInput" accept="image/*" class="w-full bg-[#09090b] border border-slate-700 rounded p-2 text-xs text-slate-400 focus:outline-none focus:border-emerald-400 file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
           ${existingReadme.image ? `<p class="text-[10px] text-emerald-400 mt-1">✓ An image is already attached. Uploading a new one will replace it.</p>` : ''}
         </div>
 
         <div class="flex gap-2 justify-end pt-2">
           <button type="button" onclick="closeReadmeEditorModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded transition uppercase">
-            SKIP / LATER
+            SKIP
           </button>
           <button type="submit" class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded transition uppercase">
-            PUBLISH README
+            PUBLISH
           </button>
         </div>
       </form>
@@ -685,7 +687,7 @@ function openDetailModal(id) {
         <span>•</span>
         ${isResolved 
           ? `<span class="text-emerald-400 font-bold">RESOLVED</span>` 
-          : (ticket.reservedBy ? `<span class="text-amber-400">CLAIMED BY @${ticket.reservedBy}</span>` : `<span class="text-slate-500">OPEN</span>`)}
+          : (ticket.reservedBy === ticket.issuer ? '' : (ticket.reservedBy ? `<span class="text-amber-400">CLAIMED BY @${ticket.reservedBy}</span>` : `<span class="text-slate-500">OPEN</span>`))}
       </div>
 
       <h2 class="text-xl font-bold mb-4 text-white">${ticket.title}</h2>
@@ -745,7 +747,7 @@ function openDetailModal(id) {
 
           <div class="space-y-3 mb-4 max-h-56 overflow-y-auto pr-1">
             ${solutionsList.length === 0
-              ? `<p class="text-xs text-slate-500 italic py-1">No solutions or comments submitted yet.</p>`
+              ? `<p class="text-xs text-slate-500 italic py-1">No comments or solutions.</p>`
               : solutionsList.map((s, index) => {
                   const solId = s.id !== undefined ? s.id : index;
                   const isCommentOwner = user && user.username === s.solver;
@@ -798,7 +800,7 @@ function openDetailModal(id) {
           </div>
 
           <form onsubmit="submitSolution(event, ${ticket.id})" class="flex gap-2">
-            <input type="text" id="solutionInput" required maxlength="300" placeholder="Suggest a solution or paste repo link..." class="flex-1 bg-[#09090b] border border-slate-700 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono-ticket">
+            <input type="text" id="solutionInput" required maxlength="300" placeholder="leave a comment..." class="flex-1 bg-[#09090b] border border-slate-700 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono-ticket">
             <button type="submit" class="bg-white hover:bg-slate-200 text-black font-bold px-4 py-2 rounded text-xs transition">
               SEND
             </button>
@@ -834,6 +836,25 @@ function approveSolution(ticketId, solId) {
       `🎉 @${user.username} approved your solution on ticket #${formatTicketId(ticket.id)}!`,
       ticket.id
     );
+  }
+
+    ticket.readme = {
+    title: title,
+    content: content,
+    author: user ? user.username : (ticket.reservedBy || 'anonymous'),
+    links: link ? [link] : [],
+    image: base64Image,
+    publishedAt: new Date().toLocaleString()
+  };
+
+  if (!ticket.solutions) ticket.solutions = [];
+  const alreadyHasSolution = ticket.solutions.some(s => s.solver === ticket.readme.author);
+  if (!alreadyHasSolution) {
+    ticket.solutions.push({
+      id: Date.now(),
+      solver: ticket.readme.author,
+      text: title
+    });
   }
 
   localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
