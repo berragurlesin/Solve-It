@@ -54,12 +54,12 @@
   white-space: normal !important;
 }
 
-.ticket-education { background-color: #4ade80; color: #052e16; }
-.ticket-software { background-color: #c084fc; color: #3b0764; }
-.ticket-technology { background-color: #38bdf8; color: #0c4a6e; }
-.ticket-transportation { background-color: #facc15; color: #422006; }
-.ticket-community { background-color: #fb923c; color: #431407; }
-.ticket-other { background-color: #94a3b8; color: #0f172a; }
+.ticket-education { background-color: #8a9a5b; color: #052e16; }
+.ticket-software { background-color: #9c8465; color: #2e2013; }
+.ticket-technology { background-color: #6b8f9e; color: #0c4a6e; }
+.ticket-transportation { background-color: #c9a24b; color: #422006; }
+.ticket-community { background-color: #b5714a; color: #431407; }
+.ticket-other { background-color: #8c8578; color: #0f172a; }
 
 .ticket-notch-top {
   position: absolute;
@@ -138,6 +138,15 @@
 
 .ticket-card:hover .torn-stub {
   transform: rotate(6deg) translate(9px, 4px) !important;
+}
+
+.filter-urgent {
+  animation: urgentBlink 1.8s ease-in-out infinite;
+}
+
+@keyframes urgentBlink {
+  0%, 100% { background-color: #dc2626; }
+  50% { background-color: #ef4444; }
 }
 
 .modal-body .description-box,
