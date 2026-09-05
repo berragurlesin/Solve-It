@@ -648,6 +648,16 @@ async function submitReadmeDetails(e, ticketId) {
     publishedAt: new Date().toLocaleString()
   };
 
+  if (!ticket.solutions) ticket.solutions = [];
+  const alreadyHasSolution = ticket.solutions.some(s => s.solver === ticket.readme.author);
+  if (!alreadyHasSolution) {
+    ticket.solutions.push({
+      id: Date.now(),
+      solver: ticket.readme.author,
+      text: title
+    });
+  }
+
   localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
 
   if (user && ticket.issuer !== user.username) {
@@ -836,25 +846,6 @@ function approveSolution(ticketId, solId) {
       `🎉 @${user.username} approved your solution on ticket #${formatTicketId(ticket.id)}!`,
       ticket.id
     );
-  }
-
-    ticket.readme = {
-    title: title,
-    content: content,
-    author: user ? user.username : (ticket.reservedBy || 'anonymous'),
-    links: link ? [link] : [],
-    image: base64Image,
-    publishedAt: new Date().toLocaleString()
-  };
-
-  if (!ticket.solutions) ticket.solutions = [];
-  const alreadyHasSolution = ticket.solutions.some(s => s.solver === ticket.readme.author);
-  if (!alreadyHasSolution) {
-    ticket.solutions.push({
-      id: Date.now(),
-      solver: ticket.readme.author,
-      text: title
-    });
   }
 
   localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
