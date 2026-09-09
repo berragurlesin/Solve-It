@@ -13,9 +13,20 @@
   min-height: 190px;
   color: #000000;
   padding: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  transform: rotate(-0.35deg);
+
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.14),
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 16px 26px rgba(0, 0, 0, 0.30);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+  background-repeat: repeat;
 
   --r: 18px; 
   -webkit-mask: 
@@ -27,8 +38,18 @@
 }
 
 .ticket-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.5);
+  transform: rotate(0deg) translateY(-3px);
+  box-shadow:
+    0 2px 2px rgba(0, 0, 0, 0.16),
+    0 6px 10px rgba(0, 0, 0, 0.20),
+    0 22px 34px rgba(0, 0, 0, 0.36);
+}
+
+.ticket-card:nth-child(even) {
+  transform: rotate(0.3deg);
+}
+.ticket-card:nth-child(even):hover {
+  transform: rotate(0deg) translateY(-3px);
 }
 
 .ticket-card::before,
@@ -37,10 +58,14 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: #09090b; 
   border-radius: 50%;
   z-index: 10;
-  right: 180px; 
+  right: 180px;
+
+  background: radial-gradient(circle at 35% 35%, #1c1c1f 0%, #09090b 55%, #000000 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.65),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.04);
 }
 
 .ticket-card::before {
@@ -148,12 +173,25 @@
 .ticket-other { background-color: #52a5ce; }
 
 .filter-urgent {
-  animation: urgentBlink 1.8s ease-in-out infinite;
+  animation: urgentPulse 2.4s ease-in-out infinite;
 }
 
-@keyframes urgentBlink {
-  0%, 100% { background-color: #dc2626; }
-  50% { background-color: #ef4444; }
+@keyframes urgentPulse {
+  0%, 100% {
+    background-color: #dc2626;
+    box-shadow: 0 8px 18px rgba(220, 38, 38, 0.22);
+  }
+  50% {
+    background-color: #e5504f;
+    box-shadow: 0 10px 24px rgba(220, 38, 38, 0.38);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filter-urgent {
+    animation: none;
+    background-color: #dc2626;
+  }
 }
 
 .ticket-modal {
