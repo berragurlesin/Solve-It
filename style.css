@@ -1,46 +1,89 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap');
 
 .font-mono-ticket {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
 }
-
-/* ==========================================
-   SADE VE DÜZ KART TASARIMI
-   ========================================== */
 
 .ticket-card {
   position: relative;
   font-family: 'Nunito', sans-serif;
   display: flex !important;
   width: 100% !important;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #000000;
+  min-height: 200px;
+  color: #ffffff;
+  padding: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+
+  --r: 20px;
+  -webkit-mask: 
+    radial-gradient(var(--r) at var(--r) var(--r), #0000 98%, #000 101%) 
+    calc(-1 * var(--r)) calc(-1 * var(--r));
+  mask: 
+    radial-gradient(var(--r) at var(--r) var(--r), #0000 98%, #000 101%) 
+    calc(-1 * var(--r)) calc(-1 * var(--r));
+}
+
+.ticket-card::before,
+.ticket-card::after {
+  content: '';
+  position: absolute;
+  top: 22px;
+  bottom: 22px;
+  width: 5px;
+  background-size: 5px 8px;
+  background-repeat: repeat-y;
+  z-index: 10;
+}
+
+.ticket-card::before {
+  left: 0;
+  background-image: radial-gradient(circle at 0 4px, transparent 2.5px, #09090b 3px);
+}
+
+.ticket-card::after {
+  right: 0;
+  background-image: radial-gradient(circle at 5px 4px, transparent 2.5px, #09090b 3px);
+}
+
+.ticket-inner-border {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ticket-stub-left {
+  width: 44px;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 0;
 }
 
 .ticket-main-section {
   flex: 1 1 0% !important;
   min-width: 0 !important;
-  overflow: hidden !important;
-}
-
-.ticket-stub-section {
-  width: 120px !important;
-  flex-shrink: 0 !important;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   justify-content: center;
-  border-left: 1px dashed rgba(0, 0, 0, 0.2);
-  padding-left: 12px;
-  margin-left: 12px;
 }
 
 .ticket-title {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 800;
+  color: #ffffff;
   margin-bottom: 6px;
   overflow-wrap: anywhere !important;
   word-break: break-all !important;
@@ -48,7 +91,8 @@
 }
 
 .ticket-description {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -70,26 +114,42 @@
   white-space: normal !important;
 }
 
-/* Kategori Renkleri */
-.ticket-education { background-color: #aacc96; color: #000000; }
-.ticket-software { background-color: #ab92bf; color: #000000; }
-.ticket-technology { background-color: #ff7bac; color: #000000; }
-.ticket-transportation { background-color: #efce7b; color: #000000; }
-.ticket-community { background-color: #ef6f3c; color: #000000; }
-.ticket-other { background-color: #52a5ce; color: #000000; }
-
-.barcode-lines {
-  background: repeating-linear-gradient(
-    90deg,
-    currentColor,
-    currentColor 2px,
-    transparent 2px,
-    transparent 4px
-  );
+.ticket-stub-right {
+  width: 44px;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 0;
 }
 
+.ticket-education { background-color: #ef6f3c; }
+.ticket-software { background-color: #a34eac; }
+.ticket-technology { background-color: #2b82c9; }
+.ticket-transportation { background-color: #e5a93c; }
+.ticket-community { background-color: #38a169; }
+.ticket-other { background-color: #52637a; }
+
 .torn-ticket {
-  opacity: 0.75;
+  opacity: 0.8;
+  filter: grayscale(20%);
+}
+
+.torn-stub {
+  transform: rotate(3deg) translate(4px, 2px) !important;
+  box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.35);
+  filter: brightness(0.9);
+  border-left: 1.5px dashed rgba(255, 255, 255, 0.7) !important;
+  transition: transform 0.2s ease;
+}
+
+.ticket-card:hover .torn-stub {
+  transform: rotate(5deg) translate(7px, 3px) !important;
 }
 
 .filter-urgent {
@@ -100,10 +160,6 @@
   0%, 100% { background-color: #dc2626; }
   50% { background-color: #ef4444; }
 }
-
-/* ==========================================
-   MODAL, FORM VE GENEL BİLEŞENLER
-   ========================================== */
 
 .ticket-modal {
   position: relative;
