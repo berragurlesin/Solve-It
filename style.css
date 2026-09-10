@@ -11,19 +11,16 @@
   width: 100%;
   min-height: 190px;
   color: #000000;
-  padding: 0; 
+  padding: 0;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  /* Dümdüz net çerçeveli kutu */
   border: 2px solid #000000;
   border-radius: 8px;
   background-clip: padding-box;
 }
 
-.ticket-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
-}
 
 .ticket-card::before,
 .ticket-card::after {
@@ -31,7 +28,7 @@
   position: absolute;
   width: 16px;
   height: 16px;
-  background-color: #09090b; 
+  background-color: #09090b;
   border: 2px solid #000000;
   border-radius: 50%;
   z-index: 20;
@@ -103,7 +100,7 @@
 .torn-stub,
 .ticket-card > div:last-child {
   width: 128px;
-  border-left: 2px dashed #000000 !important; 
+  border-left: 2px dashed #000000 !important;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -118,34 +115,16 @@
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
-.ticket-card:hover .torn-stub {
-  transform: none !important;
-}
-
 .barcode-lines {
   width: 80%;
   height: 35px;
   margin-top: 4px;
   background: repeating-linear-gradient(
     90deg,
-    #000000 0, #000000 2px,
-    transparent 2px, transparent 3px,
-    #000000 3px, #000000 6px,
-    transparent 6px, transparent 7px,
-    #000000 7px, #000000 8px,
-    transparent 8px, transparent 11px,
-    #000000 11px, #000000 13px,
-    transparent 13px, transparent 14px,
-    #000000 14px, #000000 17px,
-    transparent 17px, transparent 18px,
-    #000000 18px, #000000 19px,
-    transparent 19px, transparent 22px,
-    #000000 22px, #000000 25px,
-    transparent 25px, transparent 26px,
-    #000000 26px, #000000 27px,
-    transparent 27px, transparent 30px,
-    #000000 30px, #000000 32px,
-    transparent 32px, transparent 34px
+    #000000 0,
+    #000000 2px,
+    transparent 2px,
+    transparent 4px
   );
 }
 
