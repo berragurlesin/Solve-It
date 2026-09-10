@@ -5,50 +5,45 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
-
 .ticket-card {
   position: relative;
   display: flex;
   width: 100%;
   min-height: 190px;
   color: #000000;
-  padding: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  padding: 0; 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  --r: 18px; 
-  -webkit-mask: 
-    radial-gradient(var(--r) at var(--r) var(--r), #0000 98%, #000 101%) 
-    calc(-1 * var(--r)) calc(-1 * var(--r));
-  mask: 
-    radial-gradient(var(--r) at var(--r) var(--r), #0000 98%, #000 101%) 
-    calc(-1 * var(--r)) calc(-1 * var(--r));
+  border: 2px solid #000000;
+  border-radius: 8px;
+  background-clip: padding-box;
 }
 
 .ticket-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
 }
 
 .ticket-card::before,
 .ticket-card::after {
   content: "";
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   background-color: #09090b; 
+  border: 2px solid #000000;
   border-radius: 50%;
-  z-index: 10;
-  right: 180px; 
+  z-index: 20;
+  right: 120px;
 }
 
 .ticket-card::before {
-  top: -10px; 
+  top: -9px; 
 }
 
 .ticket-card::after {
-  bottom: -10px; 
+  bottom: -9px; 
 }
 
 .ticket-main-section {
@@ -104,10 +99,10 @@
   opacity: 1 !important;
 }
 
-
 .ticket-stub-right,
-.torn-stub {
-  width: 180px;
+.torn-stub,
+.ticket-card > div:last-child {
+  width: 128px;
   border-left: 2px dashed #000000 !important; 
   display: flex;
   flex-direction: column;
@@ -120,7 +115,7 @@
   filter: none !important;
   box-shadow: none !important;
   opacity: 1 !important;
-  background-color: transparent !important;
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
 .ticket-card:hover .torn-stub {
