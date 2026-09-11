@@ -5,6 +5,34 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
+.back-btn-plain {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 !important;
+  cursor: pointer;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+  user-select: none;
+}
+
+.back-btn-plain:hover,
+.back-btn-plain:focus,
+.back-btn-plain:active {
+  background: transparent !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 .ticket-card {
   position: relative;
   display: flex;
@@ -14,13 +42,10 @@
   padding: 0;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   cursor: pointer;
-  
-  /* Dümdüz net çerçeveli kutu */
   border: 2px solid #000000;
   border-radius: 8px;
   background-clip: padding-box;
 }
-
 
 .ticket-card::before,
 .ticket-card::after {
@@ -54,7 +79,7 @@
 
 .ticket-title {
   font-size: 1.25rem;
-  font-weight: 800;
+  font-weight: 650;
   color: #000000 !important;
   margin-bottom: 6px;
   overflow-wrap: anywhere !important;
@@ -107,7 +132,6 @@
   justify-content: space-between;
   padding: 12px;
   user-select: none;
-  
   transform: none !important;
   filter: none !important;
   box-shadow: none !important;
@@ -176,11 +200,6 @@
   border-radius: 2px;
   font-size: 0.75rem;
   transition: color 0.15s ease, border-color 0.15s ease;
-}
-
-.ticket-modal-close:hover {
-  color: #f4f4f5;
-  border-color: #52525b;
 }
 
 .ticket-modal-title {
