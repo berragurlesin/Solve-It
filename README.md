@@ -53,11 +53,9 @@ If you want to install Solve It on your own computer (I don't know what you are 
 2. Open the project folder
 3. Open `index.html` directly in any web browser (or use the live server extension in VS Code)
 
-## Notes on Logo and Concept Design
+## Notes
 
 I didn't want my site to look like a standard forum I thought a ticket theme would look aesthetic so I chose this theme. I also like the bright colors in front of the black idk, if you have any design suggestions, I'll make further developments so please share them. And the mixed orange shape between the Solve and It in the logotype symbolizes a problem waiting to be solved, which is the platforms main theme. The shape is also the site's favicon. 
-
-## Future Roadmap
 
 I’ve completed the MVP for now but, there are many things that come to mind and could be added in the future. More than the things that I listed here:
 
