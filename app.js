@@ -18,12 +18,69 @@ function initApp() {
   checkUserSession();
   renderTickets();
   setupFormListeners();
+  window.addEventListener('hashchange', handleRoute);
+  handleRoute();
 }
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initApp);
 } else {
   initApp();
+}
+
+function handleRoute() {
+  const hash = window.location.hash;
+  const homeView = document.getElementById('homeView');
+  const ticketView = document.getElementById('ticketPageView');
+  const profileView = document.getElementById('profilePageView');
+  if (!homeView || !ticketView || !profileView) return;
+
+  const ticketMatch = hash.match(/^#\/ticket\/(\d+)/);
+  const profileMatch = hash.match(/^#\/profile\/([^/]+)/);
+
+  if (ticketMatch) {
+    homeView.classList.add('hidden');
+    profileView.classList.add('hidden');
+    ticketView.classList.remove('hidden');
+    renderTicketPage(parseInt(ticketMatch[1], 10));
+    window.scrollTo(0, 0);
+  } else if (profileMatch) {
+    homeView.classList.add('hidden');
+    ticketView.classList.add('hidden');
+    profileView.classList.remove('hidden');
+    renderProfilePage(decodeURIComponent(profileMatch[1]));
+    window.scrollTo(0, 0);
+  } else {
+    ticketView.classList.add('hidden');
+    profileView.classList.add('hidden');
+    homeView.classList.remove('hidden');
+  }
+}
+
+function openDetailModal(id) {
+  const target = '#/ticket/' + id;
+  if (window.location.hash === target) {
+    renderTicketPage(id);
+  } else {
+    window.location.hash = target;
+  }
+}
+
+function closeDetailModal() {
+  window.location.hash = '';
+}
+
+function openProfileModal(username) {
+  const target = '#/profile/' + encodeURIComponent(username);
+  if (window.location.hash === target) {
+    renderProfilePage(username);
+  } else {
+    window.location.hash = target;
+  }
+}
+
+function closeProfileModal() {
+  window.location.hash = '';
 }
 
 function compressAndConvertToBase64(file, maxWidth = 800, quality = 0.7) {
@@ -326,9 +383,6 @@ function renderTickets() {
     card.className = `ticket-card ${colorClass} ${isResolved ? 'torn-ticket' : ''} flex overflow-hidden transition duration-200 h-64 relative`;
 
     card.innerHTML = `
-      <div class="ticket-notch-top"></div>
-      <div class="ticket-notch-bottom"></div>
-
       ${t.urgent && !isResolved ? `
         <div class="absolute top-0 left-0 z-20 overflow-hidden w-28 h-28 pointer-events-none">
           <div class="bg-red-600 text-white font-black text-[9px] uppercase tracking-widest flex items-center justify-center -rotate-45 -translate-x-9 translate-y-5 w-36 h-5 border-b border-red-700">
@@ -337,7 +391,7 @@ function renderTickets() {
         </div>
       ` : ''}
 
-      <div class="p-6 flex-1 flex flex-col justify-between border-r-2 border-dashed border-black/30 cursor-pointer relative" onclick="openDetailModal(${t.id})">
+      <div class="ticket-main-section cursor-pointer relative" onclick="openDetailModal(${t.id})">
         ${isResolved ? `<div class="absolute inset-0 bg-black/10 pointer-events-none flex items-center justify-center font-black text-emerald-800/20 text-4xl rotate-[-12deg] tracking-widest select-none">RESOLVED</div>` : ''}
         
         <div>
@@ -346,10 +400,10 @@ function renderTickets() {
             <span class="uppercase font-extrabold">${t.category}</span>
           </div>
 
-          <h3 class="text-lg font-bold leading-snug mb-2 text-black line-clamp-2 h-12">${t.title}</h3>
+          <h3 class="ticket-title line-clamp-2 h-12">${t.title}</h3>
           
           <div class="flex gap-3 items-start">
-            <p class="text-xs opacity-80 line-clamp-3 h-14 leading-relaxed font-semibold flex-1">${t.description}</p>
+            <p class="ticket-description h-14 flex-1">${t.description}</p>
           </div>
         </div>
 
@@ -359,9 +413,7 @@ function renderTickets() {
         </div>
       </div>
 
-      <div class="w-32 p-3 flex flex-col justify-between items-center bg-black/10 text-center z-10 relative">
-
-        
+      <div class="ticket-stub-right">
         <div class="w-full h-8 barcode-lines opacity-80 my-1"></div>
         
         <div class="w-full space-y-1">
@@ -370,8 +422,7 @@ function renderTickets() {
           </button>
           
           ${!isResolved ? `
-            <button onclick="toggleReserveTicket(event, ${t.id})" class="w-full ${isReserved ? 'bg-red-600 text-white' : 'bg-[#18181b] text-[#facc15]'} border border-amber-400/20 text-[9px] font-bold py-1 rounded uppercase tracking-wider hover:opacity-90 transition">
-              ${isReserved ? 'RESERVED' : 'RESERVE'}
+<button onclick="toggleReserveTicket(event, ${t.id})" class="w-full ${isReserved ? 'bg-red-600 text-white' : 'bg-[#000000] text-white'} border border-amber-400/20 text-[9px] font-bold py-1 rounded uppercase tracking-wider hover:opacity-90 transition">              ${isReserved ? 'RESERVED' : 'RESERVE'}
             </button>
           ` : `
             <div class="w-full bg-emerald-900 text-emerald-100 text-[8px] font-bold py-1 rounded uppercase tracking-widest">
@@ -384,10 +435,10 @@ function renderTickets() {
               DELETE
             </button>
           ` : `
-            <button onclick="toggleUpvote(event, ${t.id})" class="w-full ${hasUpvoted ? 'bg-amber-500 text-black border-amber-600' : 'bg-black/60 text-white hover:bg-black'} border border-black/30 text-[9px] font-bold py-1 rounded uppercase tracking-wider transition flex items-center justify-center gap-1">
-              <span>SAME ISSUE</span>
-              <span class="bg-black/30 px-1 rounded text-[8px]">${upvotesList.length}</span>
-            </button>
+            <button onclick="toggleUpvote(event, ${t.id})" class="w-full ${hasUpvoted ? 'bg-white text-black border-gray-300' : 'bg-[#18181b] border-amber-400/20'} border text-[9px] font-bold py-1 rounded uppercase tracking-wider transition flex items-center justify-center gap-1 hover:opacity-90" style="color: ${hasUpvoted ? '#000000' : '#ffffff'} !important;">
+            <span style="color: inherit !important;">SAME ISSUE</span>
+            <span class="${hasUpvoted ? 'bg-black/10 text-black' : 'bg-white/20 text-white'} px-1 rounded text-[8px]" style="color: inherit !important;">${upvotesList.length}</span>
+        </button>
           `}
         </div>
       </div>
@@ -464,32 +515,32 @@ function openReservePlanModal(ticketId, title, issuer) {
   }
 
   modal.innerHTML = `
-    <div class="ticket-modal ticket-modal--amber max-w-md w-full p-5 relative text-white">
-      <div class="flex justify-between items-center mb-3 pb-2 border-b border-dashed border-slate-800">
-        <h3 class="text-xs font-bold text-amber-400 uppercase">RESERVE TICKET#${formatTicketId(ticketId)}</h3>
-        <button onclick="closeReservePlanModal()" class="ticket-modal-close">✕</button>
-      </div>
+    <div class="ticket-modal max-w-md w-full p-5 relative text-white">
+  <div class="flex justify-between items-center mb-3 pb-2 border-b border-dashed border-slate-800">
+    <h3 class="text-xs font-bold text-white uppercase" style="color: #ffffff !important;">RESERVE TICKET#${formatTicketId(ticketId)}</h3>
+    <button onclick="closeReservePlanModal()" class="ticket-modal-close text-white/70 hover:text-white">✕</button>
+  </div>
 
-      <h4 class="text-sm font-bold text-white mb-2">${title}</h4>
-      <p class="text-xs text-slate-400 mb-4">Write a quick plan for <span class="text-slate-200 font-bold">@${issuer}</span>:</p>
+  <h4 class="text-sm font-bold text-white mb-2">${title}</h4>
+  <p class="text-xs text-slate-400 mb-4">Write a quick plan for <span class="text-slate-200 font-bold">@${issuer}</span>:</p>
 
-      <form onsubmit="submitReservePlan(event)">
-        <div class="flex justify-between items-center mb-1">
-          <span class="text-[10px] text-slate-500">DESCRIPTION</span>
-          <span id="planCounter" class="hidden text-[10px] text-slate-500">0/300</span>
-        </div>
-        <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="explain how you plan to solve this issue..." class="ticket-field ticket-field--amber w-full p-2.5 text-xs mb-4 resize-none"></textarea>
-        
-        <div class="flex gap-2 justify-end">
-          <button type="button" onclick="closeReservePlanModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded transition uppercase">
-            CANCEL
-          </button>
-          <button type="submit" class="px-4 py-1.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded transition uppercase">
-            RESERVE THIS TICKET
-          </button>
-        </div>
-      </form>
+  <form onsubmit="submitReservePlan(event)">
+    <div class="flex justify-between items-center mb-1">
+      <span class="text-[10px] text-slate-500">DESCRIPTION</span>
+      <span id="planCounter" class="hidden text-[10px] text-slate-500">0/300</span>
     </div>
+    <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="explain how you plan to solve this issue..." class="ticket-field w-full p-2.5 text-xs mb-4 resize-none"></textarea>
+    
+    <div class="flex gap-2 justify-end">
+      <button type="button" onclick="closeReservePlanModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded transition uppercase">
+        CANCEL
+      </button>
+      <button type="submit" class="px-4 py-1.5 bg-white hover:bg-slate-200 text-black font-bold text-xs rounded transition uppercase" style="background-color: #ffffff !important; color: #000000 !important;">
+        RESERVE THIS TICKET
+      </button>
+    </div>
+  </form>
+</div>
   `;
 
   modal.classList.remove('hidden');
@@ -537,155 +588,24 @@ function submitReservePlan(e) {
   closeReservePlanModal();
   renderTickets();
   checkUserSession();
-
-  openReadmeEditorModal(ticket.id);
 }
 
-function openReadmeEditorModal(ticketId) {
-  const tickets = getTickets();
-  const ticket = tickets.find(t => parseInt(t.id, 10) === parseInt(ticketId, 10));
-  if (!ticket) return;
 
-  let modal = document.getElementById('readmeEditorModal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'readmeEditorModal';
-    modal.className = 'fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 font-mono-ticket';
-    document.body.appendChild(modal);
-  }
-
-  const existingReadme = ticket.readme || { title: '', content: '', links: [''], image: null };
-
-  modal.innerHTML = `
-    <div class="ticket-modal ticket-modal--emerald max-w-lg w-full p-5 relative text-white max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-4 pb-2 border-b border-dashed border-slate-800">
-        <h3 class="text-xs font-bold text-emerald-400 uppercase">SOLUTION DETAILS & README (#${formatTicketId(ticketId)})</h3>
-        <button onclick="closeReadmeEditorModal()" class="ticket-modal-close">✕</button>
-      </div>
-
-      <form onsubmit="submitReadmeDetails(event, ${ticket.id})" class="space-y-4">
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <label class="block text-xs font-bold text-slate-300">TITLE:</label>
-            <span id="readmeTitleCounter" class="hidden text-[10px] text-slate-500">${(existingReadme.title || '').length}/100</span>
-          </div>
-          <input type="text" id="readmeTitleInput" required maxlength="100" value="${existingReadme.title || ''}" placeholder="write a title for your solution.." class="ticket-field ticket-field--emerald w-full p-2.5 text-xs">
-        </div>
-
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <label class="block text-xs font-bold text-slate-300">DETAILS:</label>
-            <span id="readmeContentCounter" class="hidden text-[10px] text-slate-500">${(existingReadme.content || '').length}/2000</span>
-          </div>
-          <textarea id="readmeContentInput" required maxlength="2000" rows="5" placeholder="what did you build, how it works and anything else you'd like to add..." class="ticket-field ticket-field--emerald w-full p-2.5 text-xs resize-none">${existingReadme.content || ''}</textarea>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">LINKS (GitHub, Drive, Video):</label>
-          <input type="url" id="readmeLinkInput" value="${(existingReadme.links && existingReadme.links[0]) || ''}" placeholder="your link here..." class="ticket-field ticket-field--emerald w-full p-2.5 text-xs">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-300 mb-1">ATTACH IMAGE:</label>
-          <input type="file" id="readmeImageInput" accept="image/*" class="ticket-field ticket-field--emerald w-full p-2 text-xs text-slate-400 file:mr-3 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
-          ${existingReadme.image ? `<p class="text-[10px] text-emerald-400 mt-1">✓ An image is already attached. Uploading a new one will replace it.</p>` : ''}
-        </div>
-
-        <div class="flex gap-2 justify-end pt-2">
-          <button type="button" onclick="closeReadmeEditorModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded transition uppercase">
-            SKIP
-          </button>
-          <button type="submit" class="px-4 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded transition uppercase">
-            PUBLISH
-          </button>
-        </div>
-      </form>
-    </div>
-  `;
-
-  modal.classList.remove('hidden');
-
-  const titleIn = document.getElementById('readmeTitleInput');
-  const titleCount = document.getElementById('readmeTitleCounter');
-  if (titleIn && titleCount) {
-    titleIn.addEventListener('input', () => titleCount.innerText = `${titleIn.value.length}/100`);
-  }
-
-  const contentIn = document.getElementById('readmeContentInput');
-  const contentCount = document.getElementById('readmeContentCounter');
-  if (contentIn && contentCount) {
-    contentIn.addEventListener('input', () => contentCount.innerText = `${contentIn.value.length}/2000`);
-  }
-}
-
-function closeReadmeEditorModal() {
-  const modal = document.getElementById('readmeEditorModal');
-  if (modal) modal.classList.add('hidden');
-}
-
-async function submitReadmeDetails(e, ticketId) {
-  e.preventDefault();
-  const user = JSON.parse(localStorage.getItem('solveit_user'));
-  const title = document.getElementById('readmeTitleInput').value.trim();
-  const content = document.getElementById('readmeContentInput').value.trim();
-  const link = document.getElementById('readmeLinkInput').value.trim();
-
-  const imageInput = document.getElementById('readmeImageInput');
-  const tickets = getTickets();
-  const ticket = tickets.find(t => parseInt(t.id, 10) === parseInt(ticketId, 10));
-  if (!ticket) return;
-
-  let base64Image = ticket.readme ? ticket.readme.image : null;
-
-  if (imageInput && imageInput.files && imageInput.files[0]) {
-    try {
-      base64Image = await compressAndConvertToBase64(imageInput.files[0]);
-    } catch (err) {
-      console.error("Readme error:", err);
-    }
-  }
-
-  ticket.readme = {
-    title: title,
-    content: content,
-    author: user ? user.username : (ticket.reservedBy || 'anonymous'),
-    links: link ? [link] : [],
-    image: base64Image,
-    publishedAt: new Date().toLocaleString()
-  };
-
-  if (!ticket.solutions) ticket.solutions = [];
-  const alreadyHasSolution = ticket.solutions.some(s => s.solver === ticket.readme.author);
-  if (!alreadyHasSolution) {
-    ticket.solutions.push({
-      id: Date.now(),
-      solver: ticket.readme.author,
-      text: title
-    });
-  }
-
-  localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
-
-  if (user && ticket.issuer !== user.username) {
-    addNotification(
-      ticket.issuer,
-      `@${user.username} published a solution Readme on ticket #${formatTicketId(ticket.id)}`,
-      ticket.id
-    );
-  }
-
-  closeReadmeEditorModal();
-  renderTickets();
-  openDetailModal(ticketId);
-}
-
-function openDetailModal(id) {
+function renderTicketPage(id) {
   const tickets = getTickets();
   const ticket = tickets.find(t => parseInt(t.id, 10) === parseInt(id, 10));
-  if (!ticket) return;
-
-  const container = document.getElementById('detailCardContainer');
+  const container = document.getElementById('ticketPageContainer');
   if (!container) return;
+
+  if (!ticket) {
+    container.innerHTML = `
+      <div class="text-white font-mono-ticket">
+        <button class="back-btn-plain" onclick="closeDetailModal()" aria-label="Back">← Back</button>
+        <p class="text-sm text-slate-400 mt-4">This ticket doesn't exist (maybe it was deleted).</p>
+      </div>
+    `;
+    return;
+  }
 
   const user = JSON.parse(localStorage.getItem('solveit_user'));
   const isIssuer = user && user.username === ticket.issuer;
@@ -693,59 +613,43 @@ function openDetailModal(id) {
   const solutionsList = ticket.solutions || [];
 
   container.innerHTML = `
-    <div class="ticket-modal ticket-modal--neutral p-6 relative text-white font-mono-ticket max-h-[85vh] overflow-y-auto max-w-3xl mx-auto">
-      <button onclick="closeDetailModal()" class="ticket-modal-close">✕</button>
+    <button onclick="closeDetailModal()" class="text-xs text-slate-400 hover:text-white font-bold uppercase mb-6 inline-block font-mono-ticket">← Back to tickets</button>
 
-      <div class="flex items-center gap-2 mb-2 text-xs text-slate-400">
-        <span class="font-bold text-slate-200">#${formatTicketId(ticket.id)}</span>
-        <span>•</span>
-        <span class="uppercase text-slate-300">${ticket.category || 'OTHER'}</span>
-        <span>•</span>
-        ${isResolved 
-          ? `<span class="text-emerald-400 font-bold">RESOLVED</span>` 
-          : (ticket.reservedBy === ticket.issuer ? '' : (ticket.reservedBy ? `<span class="text-slate-200">CLAIMED BY @${ticket.reservedBy}</span>` : `<span class="text-slate-500">OPEN</span>`))}
+    <div class="text-white font-mono-ticket">
+      <div class="mb-3 text-xs font-bold text-slate-200">
+        TICKET #${formatTicketId(ticket.id)}
       </div>
 
-      <h2 class="text-xl font-bold mb-4 text-white">${ticket.title}</h2>
-      
-      <div class="text-slate-200 text-sm leading-relaxed mb-6">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2 text-white leading-tight">${ticket.title}</h1>
+      <p class="text-xs text-slate-400 mb-8 cursor-pointer hover:underline" onclick="openProfileModal('${ticket.issuer}')">@${ticket.issuer}</p>
+
+      <div class="text-slate-200 text-base leading-relaxed mb-8 max-w-3xl">
         <p class="whitespace-pre-wrap">${makeLinksClickable(ticket.description)}</p>
         ${ticket.image ? `
           <div class="mt-4">
-            <span class="text-[10px] text-slate-400 block mb-1 uppercase font-bold">ATTACHED IMAGE:</span>
             <a href="${ticket.image}" target="_blank" rel="noopener noreferrer">
-              <img src="${ticket.image}" alt="Ticket Image" class="max-h-64 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
+              <img src="${ticket.image}" alt="Ticket Image" class="max-h-80 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
             </a>
           </div>
         ` : ''}
       </div>
 
       ${isResolved ? `
-        <div class="pt-4 border-t border-dashed border-slate-800">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-emerald-400 uppercase">APPROVED SOLUTION & README</span>
-            ${ticket.readme?.author || ticket.reservedBy ? `<span class="text-[11px] text-slate-400 cursor-pointer hover:underline" onclick="closeDetailModal(); openProfileModal('${ticket.readme?.author || ticket.reservedBy}')">by @${ticket.readme?.author || ticket.reservedBy}</span>` : ''}
+        <div class="pt-6 border-t border-dashed border-slate-800 max-w-3xl">
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-xs font-bold text-emerald-400 uppercase">APPROVED SOLUTION</span>
+            ${ticket.readme?.author || ticket.reservedBy ? `<span class="text-[11px] text-slate-400 cursor-pointer hover:underline" onclick="openProfileModal('${ticket.readme?.author || ticket.reservedBy}')">@${ticket.readme?.author || ticket.reservedBy}</span>` : ''}
           </div>
           
           ${ticket.readme ? `
-            <p class="text-xs text-slate-300 whitespace-pre-wrap leading-relaxed mb-3">
+            <p class="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed mb-3">
               ${makeLinksClickable(ticket.readme.content)}
             </p>
             ${ticket.readme.image ? `
               <div class="my-3">
-                <span class="text-[10px] text-emerald-400 block mb-1 uppercase font-bold">README ATTACHMENT:</span>
                 <a href="${ticket.readme.image}" target="_blank" rel="noopener noreferrer">
-                  <img src="${ticket.readme.image}" alt="Readme Visual" class="max-h-64 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
+                  <img src="${ticket.readme.image}" alt="Readme Visual" class="max-h-80 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
                 </a>
-              </div>
-            ` : ''}
-            ${(ticket.readme.links && ticket.readme.links.length > 0) ? `
-              <div class="flex flex-wrap gap-2 mt-2">
-                ${ticket.readme.links.map(l => `
-                  <a href="${l}" target="_blank" rel="noopener noreferrer" class="text-xs text-white hover:text-slate-300 underline inline-flex items-center gap-1">
-                    ${l} ↗
-                  </a>
-                `).join('')}
               </div>
             ` : ''}
           ` : `
@@ -753,15 +657,12 @@ function openDetailModal(id) {
           `}
         </div>
       ` : `
-        <div class="border-t border-dashed border-slate-800 pt-4">
-          <div class="flex justify-between items-center mb-3">
-            <span class="text-xs font-bold text-slate-400 uppercase">SOLUTIONS & COMMENTS (${solutionsList.length})</span>
-            <button onclick="openReadmeEditorModal(${ticket.id})" class="text-xs text-white hover:text-slate-300 font-bold underline">
-              + Attach Readme / Link
-            </button>
+        <div class="border-t border-dashed border-slate-800 pt-6 max-w-3xl">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-bold text-slate-400 uppercase">SOLUTIONS & COMMENTS</span>
           </div>
 
-          <div class="space-y-3 mb-4 max-h-56 overflow-y-auto pr-1">
+          <div class="space-y-4 mb-6">
             ${solutionsList.length === 0
               ? `<p class="text-xs text-slate-500 italic py-1">No comments or solutions.</p>`
               : solutionsList.map((s, index) => {
@@ -769,9 +670,9 @@ function openDetailModal(id) {
                   const isCommentOwner = user && user.username === s.solver;
 
                   return `
-                    <div class="pb-3 border-b border-slate-800/80 text-xs space-y-1">
+                    <div class="pb-4 border-b border-slate-800/80 text-xs space-y-1">
                       <div class="flex justify-between items-center">
-                        <span class="font-bold text-slate-300 cursor-pointer hover:underline" onclick="closeDetailModal(); openProfileModal('${s.solver}')">@${s.solver}</span>
+                        <span class="font-bold text-slate-300 cursor-pointer hover:underline" onclick="openProfileModal('${s.solver}')">@${s.solver}</span>
                         <div class="flex items-center gap-2">
                           ${(isIssuer && !isCommentOwner) ? `
                             <button onclick="approveSolution(${ticket.id}, ${solId})" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2 py-0.5 rounded transition">
@@ -788,26 +689,11 @@ function openDetailModal(id) {
 
                       <p class="text-slate-300 leading-relaxed">${makeLinksClickable(s.text)}</p>
 
-                      ${ticket.readme && (ticket.readme.author === s.solver || ticket.reservedBy === s.solver) ? `
-                        <div class="mt-2 pt-2 border-t border-slate-800 text-slate-300">
-                          <span class="text-[10px] font-bold text-white block mb-0.5">ATTACHED README:</span>
-                          <p class="text-[11px] whitespace-pre-wrap">${makeLinksClickable(ticket.readme.content)}</p>
-                          ${ticket.readme.image ? `
-                            <div class="mt-2">
-                              <a href="${ticket.readme.image}" target="_blank" rel="noopener noreferrer">
-                                <img src="${ticket.readme.image}" alt="Readme Visual" class="max-h-48 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
-                              </a>
-                            </div>
-                          ` : ''}
-                          ${(ticket.readme.links && ticket.readme.links.length > 0) ? `
-                            <div class="flex flex-wrap gap-2 mt-1">
-                              ${ticket.readme.links.map(l => `
-                                <a href="${l}" target="_blank" rel="noopener noreferrer" class="text-[11px] text-white underline">
-                                  ${l} ↗
-                                </a>
-                              `).join('')}
-                            </div>
-                          ` : ''}
+                      ${s.image ? `
+                        <div class="mt-2">
+                          <a href="${s.image}" target="_blank" rel="noopener noreferrer">
+                            <img src="${s.image}" alt="Comment Image" class="max-h-48 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
+                          </a>
                         </div>
                       ` : ''}
                     </div>
@@ -815,20 +701,20 @@ function openDetailModal(id) {
                 }).join('')}
           </div>
 
-          <form onsubmit="submitSolution(event, ${ticket.id})" class="flex gap-2">
-            <input type="text" id="solutionInput" required maxlength="300" placeholder="leave a comment..." class="ticket-field flex-1 px-3 py-2 text-xs">
-            <button type="submit" class="bg-white hover:bg-slate-200 text-black font-bold px-4 py-2 rounded text-xs transition">
-              SEND
-            </button>
+          <form onsubmit="submitSolution(event, ${ticket.id})" class="flex flex-col gap-2 max-w-xl">
+            <input type="text" id="solutionInput" required maxlength="300" placeholder="leave a comment..." class="ticket-field w-full px-3 py-2 text-xs">
+            <div class="flex justify-between items-center">
+              <input type="file" id="commentImageInput" accept="image/*" class="text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
+              <button type="submit" class="bg-white hover:bg-slate-200 text-black font-bold px-4 py-2 rounded text-xs transition shrink-0">
+                SEND
+              </button>
+            </div>
           </form>
         </div>
       `}
 
     </div>
   `;
-
-  const detailModal = document.getElementById('detailModal');
-  if (detailModal) detailModal.classList.remove('hidden');
 }
 
 function approveSolution(ticketId, solId) {
@@ -849,27 +735,36 @@ function approveSolution(ticketId, solId) {
   if (sol && sol.solver !== user.username) {
     addNotification(
       sol.solver,
-      `🎉 @${user.username} approved your solution on ticket #${formatTicketId(ticket.id)}!`,
+      ` @${user.username} approved your solution on ticket #${formatTicketId(ticket.id)}!`,
       ticket.id
     );
   }
 
   localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
-  openDetailModal(ticketId);
+  renderTicketPage(ticketId);
   renderTickets();
 }
 
-function submitSolution(e, ticketId) {
+async function submitSolution(e, ticketId) {
   e.preventDefault();
   const user = JSON.parse(localStorage.getItem('solveit_user'));
   if (!user) {
-    closeDetailModal();
     openAuthModal('signin');
     return;
   }
 
   const input = document.getElementById('solutionInput');
+  const imageInput = document.getElementById('commentImageInput');
   const text = input ? input.value : '';
+
+  let base64Image = null;
+  if (imageInput && imageInput.files && imageInput.files[0]) {
+    try {
+      base64Image = await compressAndConvertToBase64(imageInput.files[0]);
+    } catch (err) {
+      console.error("Görsel yükleme hatası:", err);
+    }
+  }
 
   const tickets = getTickets();
   const ticket = tickets.find(t => parseInt(t.id, 10) === parseInt(ticketId, 10));
@@ -880,7 +775,8 @@ function submitSolution(e, ticketId) {
   ticket.solutions.push({ 
     id: Date.now(), 
     solver: user.username, 
-    text 
+    text,
+    image: base64Image
   });
 
   localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
@@ -888,12 +784,12 @@ function submitSolution(e, ticketId) {
   if (ticket.issuer !== user.username) {
     addNotification(
       ticket.issuer,
-      `@${user.username} commented/proposed a solution on ticket #${formatTicketId(ticket.id)}: "${text}"`,
+      `@${user.username} commented on ticket #${formatTicketId(ticket.id)}: "${text}"`,
       ticket.id
     );
   }
 
-  openDetailModal(ticketId);
+  renderTicketPage(ticketId);
   renderTickets();
 }
 
@@ -914,13 +810,8 @@ function deleteSolution(ticketId, solId) {
   });
 
   localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
-  openDetailModal(ticketId);
+  renderTicketPage(ticketId);
   renderTickets();
-}
-
-function closeDetailModal() { 
-  const modal = document.getElementById('detailModal');
-  if (modal) modal.classList.add('hidden'); 
 }
 
 function deleteTicket(e, ticketId) {
@@ -935,7 +826,9 @@ function deleteTicket(e, ticketId) {
 
   const updatedTickets = tickets.filter(t => parseInt(t.id, 10) !== parseInt(ticketId, 10));
   localStorage.setItem('solveit_tickets', JSON.stringify(updatedTickets));
-  closeDetailModal();
+  if (window.location.hash === '#/ticket/' + ticketId) {
+    window.location.hash = '';
+  }
   renderTickets();
 }
 
@@ -1061,9 +954,6 @@ function openYourProjectsModal() {
                 </div>
                 <div class="flex gap-2">
                   <button onclick="closeYourProjectsModal(); openDetailModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded text-[10px] font-bold uppercase">Inspect</button>
-                  ${t.status !== 'RESOLVED' ? `
-                    <button onclick="closeYourProjectsModal(); openReadmeEditorModal(${t.id})" class="text-emerald-400 hover:text-emerald-300 px-1 py-1 text-[10px] font-bold uppercase">Edit Readme</button>
-                  ` : ''}
                 </div>
               </div>
             `).join('')}
@@ -1173,19 +1063,13 @@ function closePostModal() {
   if (modal) modal.classList.add('hidden');
 }
 
-let currentProfileUser = null;
-
-function openProfileModal(username) {
-  currentProfileUser = username;
-  const modal = document.getElementById('profileModal');
-  if (!modal) return;
-  
-  document.getElementById('profileUsername').innerText = `@${username}`;
-  document.getElementById('profileAvatar').innerText = username.charAt(0).toUpperCase();
+function renderProfilePage(username) {
+  const container = document.getElementById('profilePageContainer');
+  if (!container) return;
 
   const tickets = getTickets();
   const userTickets = tickets.filter(t => t.issuer === username);
-  
+
   const userSolutions = [];
   tickets.forEach(t => {
     if (t.solutions && Array.isArray(t.solutions)) {
@@ -1197,43 +1081,54 @@ function openProfileModal(username) {
     }
   });
 
-  document.getElementById('countIssues').innerText = userTickets.length;
-  document.getElementById('countSolutions').innerText = userSolutions.length;
+  container.innerHTML = `
+    <button onclick="closeProfileModal()" class="text-xs text-slate-400 hover:text-white font-bold uppercase mb-6 inline-block font-mono-ticket">← Back to tickets</button>
 
-  const issuesContainer = document.getElementById('profileIssuesList');
-  if (userTickets.length === 0) {
-    issuesContainer.innerHTML = `<p class="text-xs text-slate-500 font-mono-ticket py-4 text-center">// NO ISSUES PUBLISHED YET</p>`;
-  } else {
-    issuesContainer.innerHTML = userTickets.map(t => `
-      <div onclick="closeProfileModal(); openDetailModal(${t.id})" class="p-2.5 bg-[#09090b] border border-slate-800 rounded hover:border-amber-500/50 transition cursor-pointer flex justify-between items-center">
-        <div>
-          <span class="text-[10px] font-mono-ticket text-amber-300 border border-amber-400/30 px-1.5 py-0.5 rounded">${t.category}</span>
-          <h4 class="text-sm font-bold text-white font-mono-ticket mt-1">${t.title}</h4>
+    <div class="text-white">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-14 h-14 rounded-full bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-amber-300 font-bold text-2xl font-mono-ticket">
+          <span>${username.charAt(0).toUpperCase()}</span>
         </div>
-        <span class="text-xs font-mono-ticket text-slate-500">${t.status === 'RESOLVED' ? 'SOLVED' : 'OPEN'}</span>
+        <div>
+          <h1 class="text-2xl font-bold text-white font-mono-ticket">@${username}</h1>
+        </div>
       </div>
-    `).join('');
-  }
 
-  const solutionsContainer = document.getElementById('profileSolutionsList');
-  if (userSolutions.length === 0) {
-    solutionsContainer.innerHTML = `<p class="text-xs text-slate-500 font-mono-ticket py-4 text-center">// NO SOLUTIONS SUBMITTED YET</p>`;
-  } else {
-    solutionsContainer.innerHTML = userSolutions.map(s => `
-      <div onclick="closeProfileModal(); openDetailModal(${s.ticketId})" class="p-2.5 bg-[#09090b] border border-slate-800 rounded hover:border-emerald-500/50 transition cursor-pointer">
-        <span class="text-[10px] font-mono-ticket text-slate-400">// ON TICKET: <strong class="text-white">${s.ticketTitle}</strong></span>
-        <p class="text-xs text-slate-300 font-mono-ticket mt-1 line-clamp-2">"${s.solutionText}"</p>
+      <div class="flex gap-6 mb-6 border-b border-dashed border-slate-800 pb-3 max-w-3xl">
+        <button onclick="switchProfileTab('issues')" id="tabBtnIssues" class="text-xs font-mono-ticket font-bold text-amber-300 border-b-2 border-amber-400 pb-1">
+          ISSUES CREATED (${userTickets.length})
+        </button>
+        <button onclick="switchProfileTab('solutions')" id="tabBtnSolutions" class="text-xs font-mono-ticket font-bold text-slate-400 hover:text-slate-200 pb-1">
+          SOLUTIONS PROVIDED (${userSolutions.length})
+        </button>
       </div>
-    `).join('');
-  }
 
-  switchProfileTab('issues');
-  modal.classList.remove('hidden');
-}
+      <div id="profileIssuesList" class="grid gap-3 md:grid-cols-2 max-w-3xl">
+        ${userTickets.length === 0
+          ? `<p class="text-xs text-slate-500 font-mono-ticket py-4 text-center col-span-2">// NO ISSUES PUBLISHED YET</p>`
+          : userTickets.map(t => `
+            <div onclick="openDetailModal(${t.id})" class="p-3 bg-[#09090b] border border-slate-800 rounded hover:border-amber-500/50 transition cursor-pointer flex justify-between items-center">
+              <div>
+                <span class="text-[10px] font-mono-ticket text-amber-300 border border-amber-400/30 px-1.5 py-0.5 rounded">${t.category}</span>
+                <h4 class="text-sm font-bold text-white font-mono-ticket mt-1">${t.title}</h4>
+              </div>
+              <span class="text-xs font-mono-ticket text-slate-500">${t.status === 'RESOLVED' ? 'SOLVED' : 'OPEN'}</span>
+            </div>
+          `).join('')}
+      </div>
 
-function closeProfileModal() {
-  const modal = document.getElementById('profileModal');
-  if (modal) modal.classList.add('hidden');
+      <div id="profileSolutionsList" class="grid gap-3 md:grid-cols-2 max-w-3xl hidden">
+        ${userSolutions.length === 0
+          ? `<p class="text-xs text-slate-500 font-mono-ticket py-4 text-center col-span-2">// NO SOLUTIONS SUBMITTED YET</p>`
+          : userSolutions.map(s => `
+            <div onclick="openDetailModal(${s.ticketId})" class="p-3 bg-[#09090b] border border-slate-800 rounded hover:border-emerald-500/50 transition cursor-pointer">
+              <span class="text-[10px] font-mono-ticket text-slate-400">// ON TICKET: <strong class="text-white">${s.ticketTitle}</strong></span>
+              <p class="text-xs text-slate-300 font-mono-ticket mt-1 line-clamp-2">"${s.solutionText}"</p>
+            </div>
+          `).join('')}
+      </div>
+    </div>
+  `;
 }
 
 function switchProfileTab(tab) {
@@ -1251,7 +1146,7 @@ function switchProfileTab(tab) {
     btnSolutions.className = "text-xs font-mono-ticket font-bold text-slate-400 hover:text-slate-200 pb-1";
   } else {
     issuesList.classList.add('hidden');
-    solutionsList.classList.remove('hidden');
+    solutionsList.remove('hidden');
     btnSolutions.className = "text-xs font-mono-ticket font-bold text-emerald-400 border-b-2 border-emerald-500 pb-1";
     btnIssues.className = "text-xs font-mono-ticket font-bold text-slate-400 hover:text-slate-200 pb-1";
   }
