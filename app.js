@@ -161,7 +161,7 @@ function checkUserSession() {
         <button onclick="openAuthModal('signin')" class="text-slate-300 font-bold cursor-pointer">
           Sign In
         </button>
-        <button onclick="openAuthModal('signup')" class="bg-white text-black font-bold px-4 py-1.5 rounded-full cursor-pointer">
+        <button onclick="openAuthModal('signup')" class="text-white font-bold cursor-pointer">
           Sign Up
         </button>
       </div>
