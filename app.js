@@ -32,27 +32,17 @@ function handleRoute() {
   const hash = window.location.hash;
   const homeView = document.getElementById('homeView');
   const ticketView = document.getElementById('ticketPageView');
-  const profileView = document.getElementById('profilePageView');
-  if (!homeView || !ticketView || !profileView) return;
+  if (!homeView || !ticketView) return;
 
   const ticketMatch = hash.match(/^#\/ticket\/(\d+)/);
-  const profileMatch = hash.match(/^#\/profile\/([^/]+)/);
 
   if (ticketMatch) {
     homeView.classList.add('hidden');
-    profileView.classList.add('hidden');
     ticketView.classList.remove('hidden');
     renderTicketPage(parseInt(ticketMatch[1], 10));
     window.scrollTo(0, 0);
-  } else if (profileMatch) {
-    homeView.classList.add('hidden');
-    ticketView.classList.add('hidden');
-    profileView.classList.remove('hidden');
-    renderProfilePage(decodeURIComponent(profileMatch[1]));
-    window.scrollTo(0, 0);
   } else {
     ticketView.classList.add('hidden');
-    profileView.classList.add('hidden');
     homeView.classList.remove('hidden');
   }
 }
@@ -67,19 +57,6 @@ function openDetailModal(id) {
 }
 
 function closeDetailModal() {
-  window.location.hash = '';
-}
-
-function openProfileModal(username) {
-  const target = '#/profile/' + encodeURIComponent(username);
-  if (window.location.hash === target) {
-    renderProfilePage(username);
-  } else {
-    window.location.hash = target;
-  }
-}
-
-function closeProfileModal() {
   window.location.hash = '';
 }
 
@@ -119,7 +96,7 @@ function makeLinksClickable(text) {
   if (!text) return '';
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return text.replace(urlRegex, (url) => {
-    return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-bold break-all">${url}</a>`;
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline font-bold break-all">${url}</a>`;
   });
 }
 
@@ -159,35 +136,32 @@ function checkUserSession() {
     const unreadCount = notifications.filter(n => !n.read).length;
 
     navAuthArea.innerHTML = `
-      <div class="flex items-center gap-5 font-mono-ticket text-xs">
-        <button onclick="openYourProjectsModal()" class="text-slate-300 hover:text-white font-bold transition cursor-pointer">
+      <div class="flex items-center gap-5 font-mono-ticket nav-text-lg">
+        <button onclick="openYourProjectsModal()" class="text-slate-300 font-bold cursor-pointer">
           Your Projects
         </button>
-        <button onclick="openNotificationsModal()" class="text-slate-300 hover:text-white font-bold transition cursor-pointer relative flex items-center gap-1.5">
+        <button onclick="openNotificationsModal()" class="text-slate-300 font-bold cursor-pointer relative flex items-center gap-1.5">
           <span>Notifications</span>
-          ${unreadCount > 0 ? `<span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full leading-none">${unreadCount}</span>` : ''}
+          ${unreadCount > 0 ? `<span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full leading-none">${unreadCount}</span>` : ''}
         </button>
-        <button onclick="openProfileModal('${user.username}')" class="text-slate-300 hover:text-white font-bold transition cursor-pointer rounded-full flex items-center gap-1">
-          👤 @${user.username}
-        </button>
-        <button onclick="handleLogout()" class="text-slate-300 hover:text-white font-bold transition cursor-pointer relative flex items-center gap-1.5">
+        <button onclick="handleLogout()" class="text-slate-300 font-bold cursor-pointer relative flex items-center gap-1.5">
           Sign Out
         </button>
       </div>
     `;
   } else {
     navAuthArea.innerHTML = `
-      <div class="flex items-center gap-4 font-mono-ticket text-xs">
-        <button onclick="openYourProjectsModal()" class="text-slate-300 hover:text-white font-bold transition cursor-pointer">
+      <div class="flex items-center gap-4 font-mono-ticket nav-text-lg">
+        <button onclick="openYourProjectsModal()" class="text-slate-300 font-bold cursor-pointer">
           Your Projects
         </button>
-        <button onclick="openNotificationsModal()" class="text-slate-300 hover:text-white font-bold transition cursor-pointer">
+        <button onclick="openNotificationsModal()" class="text-slate-300 font-bold cursor-pointer">
           Notifications
         </button>
-        <button onclick="openAuthModal('signin')" class="text-slate-300 hover:text-white font-bold transition cursor-pointer">
+        <button onclick="openAuthModal('signin')" class="text-slate-300 font-bold cursor-pointer">
           Sign In
         </button>
-        <button onclick="openAuthModal('signup')" class="bg-white hover:bg-slate-200 text-black font-bold px-4 py-1.5 rounded-full transition cursor-pointer">
+        <button onclick="openAuthModal('signup')" class="bg-white text-black font-bold px-4 py-1.5 rounded-full cursor-pointer">
           Sign Up
         </button>
       </div>
@@ -199,8 +173,6 @@ function openAuthModal(mode) {
   currentAuthMode = mode;
   const modal = document.getElementById('authModal');
   const title = document.getElementById('authModalTitle');
-  const switchText = document.getElementById('authSwitchText');
-  const switchBtn = document.getElementById('authSwitchBtn');
   const errorMsg = document.getElementById('authErrorMsg');
 
   if (errorMsg) errorMsg.classList.add('hidden');
@@ -210,20 +182,12 @@ function openAuthModal(mode) {
   if (pInput) pInput.value = '';
 
   if (mode === 'signup') {
-    if (title) title.innerText = 'CREATE ACCOUNT';
-    if (switchText) switchText.innerText = 'Already have an account?';
-    if (switchBtn) switchBtn.innerText = 'Sign In';
+    if (title) title.innerText = 'SIGN UP';
   } else {
     if (title) title.innerText = 'SIGN IN';
-    if (switchText) switchText.innerText = "Don't have an account?";
-    if (switchBtn) switchBtn.innerText = 'Sign Up';
   }
 
   if (modal) modal.classList.remove('hidden');
-}
-
-function switchAuthMode() {
-  openAuthModal(currentAuthMode === 'signin' ? 'signup' : 'signin');
 }
 
 function closeAuthModal() {
@@ -317,6 +281,10 @@ function addNotification(targetUsername, message, ticketId) {
   localStorage.setItem(`solveit_notifs_${targetUsername}`, JSON.stringify(notifs));
 }
 
+function escAttr(str) {
+  return String(str == null ? '' : str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+}
+
 function renderTickets() {
   const grid = document.getElementById('ticketGrid');
   if (!grid) return;
@@ -359,7 +327,8 @@ function renderTickets() {
 
   if (filtered.length === 0) {
     grid.innerHTML = `
-        <p class="text-slate-400 font-mono-ticket text-sm mb-2">NO TICKETS FOUND.</p>
+      <div class="col-span-full text-center py-12">
+        <p class="text-slate-400 font-mono-ticket text-base mb-2">NO TICKETS FOUND.</p>
       </div>
     `;
     return;
@@ -371,6 +340,7 @@ function renderTickets() {
     const isReserved = Boolean(t.reservedBy);
     const isOwner = user && user.username === t.issuer;
     const isResolved = t.status === 'RESOLVED';
+    const isUrgentCard = Boolean(t.urgent) && !isResolved;
     const upvotesList = t.upvotes || [];
     const hasUpvoted = user && upvotesList.includes(user.username);
 
@@ -380,65 +350,33 @@ function renderTickets() {
        ? 'APPROVED SOLUTION'
        : (t.readme ? 'SOLUTION PUBLISHED' : (isSelfClaimed ? '' : (isReserved ? `APPROVED BY @${t.reservedBy}` : `${(t.solutions || []).length} SOLVER`)));
 
-    card.className = `ticket-card ${colorClass} ${isResolved ? 'torn-ticket' : ''} flex overflow-hidden transition duration-200 h-64 relative`;
+    card.className = `tk ${colorClass} ${isResolved ? 'tk--solved' : ''} ${isUrgentCard ? 'tk--urgent' : ''}`;
 
     card.innerHTML = `
-      ${t.urgent && !isResolved ? `
-        <div class="absolute top-0 left-0 z-20 overflow-hidden w-28 h-28 pointer-events-none">
-          <div class="bg-red-600 text-white font-black text-[9px] uppercase tracking-widest flex items-center justify-center -rotate-45 -translate-x-9 translate-y-5 w-36 h-5 border-b border-red-700">
-            URGENT
-          </div>
-        </div>
-      ` : ''}
+      <div class="tk-hit" role="link" tabindex="0" aria-label="Open ticket ${formatTicketId(t.id)}" onclick="openDetailModal(${t.id})" onkeydown="if(event.key==='Enter'){openDetailModal(${t.id})}"></div>
+      ${isResolved ? `<span class="tk-watermark">RESOLVED</span>` : ''}
+      <h3 class="tk-title" title="${escAttr(t.title)}">${t.title}</h3>
+      <p class="tk-desc">${t.description}</p>
+      <span class="tk-cat">${t.category}</span>
+      <span class="tk-status">${statusText}</span>
+      <span class="tk-issuer">ISSUER: @${t.issuer}</span>
+      <span class="tk-id">#${formatTicketId(t.id)}</span>
 
-      <div class="ticket-main-section cursor-pointer relative" onclick="openDetailModal(${t.id})">
-        ${isResolved ? `<div class="absolute inset-0 bg-black/10 pointer-events-none flex items-center justify-center font-black text-emerald-800/20 text-4xl rotate-[-12deg] tracking-widest select-none">RESOLVED</div>` : ''}
-        
-        <div>
-          <div class="flex justify-between items-center text-xs font-bold tracking-wider opacity-80 mb-2">
-            <span class="${t.urgent && !isResolved ? 'pl-7' : ''}">TICKET #${formatTicketId(t.id)} ${isResolved ? '(STUB)' : ''}</span>
-            <span class="uppercase font-extrabold">${t.category}</span>
-          </div>
-
-          <h3 class="ticket-title line-clamp-2 h-12">${t.title}</h3>
-          
-          <div class="flex gap-3 items-start">
-            <p class="ticket-description h-14 flex-1">${t.description}</p>
-          </div>
-        </div>
-
-        <div class="pt-3 border-t border-black/15 flex justify-between items-center text-xs font-bold">
-          <span onclick="event.stopPropagation(); openProfileModal('${t.issuer}')" class="hover:underline cursor-pointer">ISSUER: @${t.issuer}</span>
-          <span class="${isResolved ? 'text-emerald-950 font-black' : ''}">${statusText}</span>
-        </div>
-      </div>
-
-      <div class="ticket-stub-right">
-        <div class="w-full h-8 barcode-lines opacity-80 my-1"></div>
-        
-        <div class="w-full space-y-1">
-          <button onclick="openDetailModal(${t.id})" class="w-full bg-black text-white text-[9px] font-bold py-1 rounded uppercase tracking-wider hover:opacity-80 transition">
-            INSPECT
-          </button>
-          
+      <div class="tk-stub">
+        <div class="tk-barcode barcode-lines"></div>
+        <div class="tk-btns">
+          <button onclick="openDetailModal(${t.id})" class="tk-btn tk-btn--inspect">INSPECT</button>
           ${!isResolved ? `
-<button onclick="toggleReserveTicket(event, ${t.id})" class="w-full ${isReserved ? 'bg-red-600 text-white' : 'bg-[#000000] text-white'} border border-amber-400/20 text-[9px] font-bold py-1 rounded uppercase tracking-wider hover:opacity-90 transition">              ${isReserved ? 'RESERVED' : 'RESERVE'}
-            </button>
+            <button onclick="toggleReserveTicket(event, ${t.id})" class="tk-btn ${isReserved ? 'tk-btn--red' : ''}">${isReserved ? 'RESERVED' : 'RESERVE'}</button>
           ` : `
-            <div class="w-full bg-emerald-900 text-emerald-100 text-[8px] font-bold py-1 rounded uppercase tracking-widest">
-              APPROVED
-            </div>
+            <div class="tk-btn tk-btn--static">APPROVED</div>
           `}
-
           ${isOwner ? `
-            <button onclick="deleteTicket(event, ${t.id})" class="w-full bg-red-700 hover:bg-red-800 text-white text-[9px] font-bold py-1 rounded uppercase tracking-wider transition">
-              DELETE
-            </button>
+            <button onclick="deleteTicket(event, ${t.id})" class="tk-btn tk-btn--red">DELETE</button>
           ` : `
-            <button onclick="toggleUpvote(event, ${t.id})" class="w-full ${hasUpvoted ? 'bg-white text-black border-gray-300' : 'bg-[#18181b] border-amber-400/20'} border text-[9px] font-bold py-1 rounded uppercase tracking-wider transition flex items-center justify-center gap-1 hover:opacity-90" style="color: ${hasUpvoted ? '#000000' : '#ffffff'} !important;">
-            <span style="color: inherit !important;">SAME ISSUE</span>
-            <span class="${hasUpvoted ? 'bg-black/10 text-black' : 'bg-white/20 text-white'} px-1 rounded text-[8px]" style="color: inherit !important;">${upvotesList.length}</span>
-        </button>
+            <button onclick="toggleUpvote(event, ${t.id})" class="tk-btn ${hasUpvoted ? 'is-on' : ''}" aria-pressed="${hasUpvoted ? 'true' : 'false'}">
+              <span>SAME ISSUE</span><span class="tk-btn-count">${upvotesList.length}</span>
+            </button>
           `}
         </div>
       </div>
@@ -515,32 +453,18 @@ function openReservePlanModal(ticketId, title, issuer) {
   }
 
   modal.innerHTML = `
-    <div class="ticket-modal max-w-md w-full p-5 relative text-white">
-  <div class="flex justify-between items-center mb-3 pb-2 border-b border-dashed border-slate-800">
-    <h3 class="text-xs font-bold text-white uppercase" style="color: #ffffff !important;">RESERVE TICKET#${formatTicketId(ticketId)}</h3>
-    <button onclick="closeReservePlanModal()" class="ticket-modal-close text-white/70 hover:text-white">✕</button>
-  </div>
-
-  <h4 class="text-sm font-bold text-white mb-2">${title}</h4>
-  <p class="text-xs text-slate-400 mb-4">Write a quick plan for <span class="text-slate-200 font-bold">@${issuer}</span>:</p>
-
-  <form onsubmit="submitReservePlan(event)">
-    <div class="flex justify-between items-center mb-1">
-      <span class="text-[10px] text-slate-500">DESCRIPTION</span>
-      <span id="planCounter" class="hidden text-[10px] text-slate-500">0/300</span>
+    <div class="dm dm--reserve" role="dialog" aria-modal="true" aria-labelledby="reserveTitle">
+      <h3 id="reserveTitle" class="dm-title">RESERVE TICKET#${formatTicketId(ticketId)}</h3>
+      <button type="button" onclick="closeReservePlanModal()" class="dm-x" aria-label="Close"></button>
+      <h4 class="r-ticket" title="${escAttr(title)}">${title}</h4>
+      <p class="r-sub">Write a quick plan for <strong>@${issuer}</strong>:</p>
+      <form onsubmit="submitReservePlan(event)">
+        <div class="r-lab"><label for="reservePlanInput">DESCRIPTION</label><span id="planCounter" class="hidden">0/300</span></div>
+        <textarea id="reservePlanInput" required maxlength="300" placeholder="explain how you plan to solve this issue..." class="dm-input r-text"></textarea>
+        <button type="button" onclick="closeReservePlanModal()" class="dm-btn r-cancel">CANCEL</button>
+        <button type="submit" class="dm-btn r-submit">RESERVE THIS TICKET</button>
+      </form>
     </div>
-    <textarea id="reservePlanInput" required maxlength="300" rows="3" placeholder="explain how you plan to solve this issue..." class="ticket-field w-full p-2.5 text-xs mb-4 resize-none"></textarea>
-    
-    <div class="flex gap-2 justify-end">
-      <button type="button" onclick="closeReservePlanModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded transition uppercase">
-        CANCEL
-      </button>
-      <button type="submit" class="px-4 py-1.5 bg-white hover:bg-slate-200 text-black font-bold text-xs rounded transition uppercase" style="background-color: #ffffff !important; color: #000000 !important;">
-        RESERVE THIS TICKET
-      </button>
-    </div>
-  </form>
-</div>
   `;
 
   modal.classList.remove('hidden');
@@ -590,7 +514,6 @@ function submitReservePlan(e) {
   checkUserSession();
 }
 
-
 function renderTicketPage(id) {
   const tickets = getTickets();
   const ticket = tickets.find(t => parseInt(t.id, 10) === parseInt(id, 10));
@@ -599,9 +522,9 @@ function renderTicketPage(id) {
 
   if (!ticket) {
     container.innerHTML = `
-      <div class="text-white font-mono-ticket">
-        <button class="back-btn-plain" onclick="closeDetailModal()" aria-label="Back">← Back</button>
-        <p class="text-sm text-slate-400 mt-4">This ticket doesn't exist (maybe it was deleted).</p>
+      <div class="text-white font-mono-ticket text-center py-8">
+        <button class="back-btn-plain mb-4" onclick="closeDetailModal()" aria-label="Back">← Back</button>
+        <p class="text-base text-slate-400">This ticket doesn't exist (maybe it was deleted).</p>
       </div>
     `;
     return;
@@ -613,108 +536,119 @@ function renderTicketPage(id) {
   const solutionsList = ticket.solutions || [];
 
   container.innerHTML = `
-    <button onclick="closeDetailModal()" class="text-xs text-slate-400 hover:text-white font-bold uppercase mb-6 inline-block font-mono-ticket">← Back to tickets</button>
+    <div class="inspect-container font-mono-ticket">
+      
+      <button onclick="closeDetailModal()" class="inspect-back-btn" aria-label="Back to tickets"></button>
 
-    <div class="text-white font-mono-ticket">
-      <div class="mb-3 text-xs font-bold text-slate-200">
-        TICKET #${formatTicketId(ticket.id)}
+      <div class="inspect-meta-info">
+        <span class="inspect-username">@${ticket.issuer}</span>
+        <span class="inspect-ticket-id">TICKET #${formatTicketId(ticket.id)}</span>
       </div>
 
-      <h1 class="text-3xl md:text-4xl font-bold mb-2 text-white leading-tight">${ticket.title}</h1>
-      <p class="text-xs text-slate-400 mb-8 cursor-pointer hover:underline" onclick="openProfileModal('${ticket.issuer}')">@${ticket.issuer}</p>
+      <h1 class="inspect-title" title="${escAttr(ticket.title)}">
+        ${ticket.title}
+      </h1>
 
-      <div class="text-slate-200 text-base leading-relaxed mb-8 max-w-3xl">
-        <p class="whitespace-pre-wrap">${makeLinksClickable(ticket.description)}</p>
-        ${ticket.image ? `
-          <div class="mt-4">
+      <div class="inspect-desc-sec">
+        <p class="whitespace-pre-wrap break-words">${makeLinksClickable(ticket.description)}</p>${ticket.image ? `
+          <div class="mt-2">
             <a href="${ticket.image}" target="_blank" rel="noopener noreferrer">
-              <img src="${ticket.image}" alt="Ticket Image" class="max-h-80 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
+              <img src="${ticket.image}" alt="Ticket Image" class="max-h-32 rounded border border-slate-400 object-contain" />
             </a>
           </div>
         ` : ''}
       </div>
 
-      ${isResolved ? `
-        <div class="pt-6 border-t border-dashed border-slate-800 max-w-3xl">
-          <div class="flex justify-between items-center mb-3">
-            <span class="text-xs font-bold text-emerald-400 uppercase">APPROVED SOLUTION</span>
-            ${ticket.readme?.author || ticket.reservedBy ? `<span class="text-[11px] text-slate-400 cursor-pointer hover:underline" onclick="openProfileModal('${ticket.readme?.author || ticket.reservedBy}')">@${ticket.readme?.author || ticket.reservedBy}</span>` : ''}
-          </div>
-          
-          ${ticket.readme ? `
-            <p class="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed mb-3">
-              ${makeLinksClickable(ticket.readme.content)}
-            </p>
-            ${ticket.readme.image ? `
-              <div class="my-3">
-                <a href="${ticket.readme.image}" target="_blank" rel="noopener noreferrer">
-                  <img src="${ticket.readme.image}" alt="Readme Visual" class="max-h-80 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
-                </a>
+      <div class="inspect-solutions-sec">
+        <div class="inspect-solutions-title">SOLUTIONS & COMMENTS</div>
+
+        <div class="inspect-solutions-list">
+          ${isResolved ? `
+            <div class="py-1">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-base font-extrabold text-emerald-800 uppercase">APPROVED SOLUTION</span>
+                ${ticket.readme?.author || ticket.reservedBy ? `<span class="text-sm font-bold text-black">@${ticket.readme?.author || ticket.reservedBy}</span>` : ''}
               </div>
-            ` : ''}
-          ` : `
-            <p class="text-xs text-slate-400 italic">This issue was marked as resolved.</p>
-          `}
-        </div>
-      ` : `
-        <div class="border-t border-dashed border-slate-800 pt-6 max-w-3xl">
-          <div class="flex justify-between items-center mb-4">
-            <span class="text-xs font-bold text-slate-400 uppercase">SOLUTIONS & COMMENTS</span>
-          </div>
-
-          <div class="space-y-4 mb-6">
-            ${solutionsList.length === 0
-              ? `<p class="text-xs text-slate-500 italic py-1">No comments or solutions.</p>`
-              : solutionsList.map((s, index) => {
-                  const solId = s.id !== undefined ? s.id : index;
-                  const isCommentOwner = user && user.username === s.solver;
-
-                  return `
-                    <div class="pb-4 border-b border-slate-800/80 text-xs space-y-1">
-                      <div class="flex justify-between items-center">
-                        <span class="font-bold text-slate-300 cursor-pointer hover:underline" onclick="openProfileModal('${s.solver}')">@${s.solver}</span>
-                        <div class="flex items-center gap-2">
-                          ${(isIssuer && !isCommentOwner) ? `
-                            <button onclick="approveSolution(${ticket.id}, ${solId})" class="text-[10px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2 py-0.5 rounded transition">
-                              Approve
-                            </button>
-                          ` : ''}
-                          ${isCommentOwner ? `
-                            <button onclick="deleteSolution(${ticket.id}, ${solId})" class="text-[10px] text-slate-500 hover:text-red-400 transition">
-                              ✕
-                            </button>
-                          ` : ''}
-                        </div>
-                      </div>
-
-                      <p class="text-slate-300 leading-relaxed">${makeLinksClickable(s.text)}</p>
-
-                      ${s.image ? `
-                        <div class="mt-2">
-                          <a href="${s.image}" target="_blank" rel="noopener noreferrer">
-                            <img src="${s.image}" alt="Comment Image" class="max-h-48 rounded border border-slate-700 object-contain hover:opacity-90 transition" />
-                          </a>
-                        </div>
-                      ` : ''}
-                    </div>
-                  `;
-                }).join('')}
-          </div>
-
-          <form onsubmit="submitSolution(event, ${ticket.id})" class="flex flex-col gap-2 max-w-xl">
-            <input type="text" id="solutionInput" required maxlength="300" placeholder="leave a comment..." class="ticket-field w-full px-3 py-2 text-xs">
-            <div class="flex justify-between items-center">
-              <input type="file" id="commentImageInput" accept="image/*" class="text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700 cursor-pointer">
-              <button type="submit" class="bg-white hover:bg-slate-200 text-black font-bold px-4 py-2 rounded text-xs transition shrink-0">
-                SEND
-              </button>
+              ${ticket.readme ? `
+                <p class="text-lg text-black whitespace-pre-wrap leading-relaxed">
+                  ${makeLinksClickable(ticket.readme.content)}
+                </p>
+              ` : `
+                <p class="text-sm text-slate-700 italic">This issue was marked as resolved.</p>
+              `}
             </div>
-          </form>
+          ` : (solutionsList.length === 0
+            ? `<p class="text-lg text-slate-700 italic py-1">No comments or solutions yet.</p>`
+            : solutionsList.map((s, index) => {
+                const solId = s.id !== undefined ? s.id : index;
+                const isCommentOwner = user && user.username === s.solver;
+
+                return `
+                  <div class="mb-3 pb-2 border-b border-slate-300 text-lg">
+                    <div class="flex justify-between items-center">
+                      <span class="font-bold text-black text-xl">@${s.solver}</span>
+                      <div class="flex items-center gap-2">
+                        ${(isIssuer && !isCommentOwner) ? `
+                          <button onclick="approveSolution(${ticket.id},${solId})" class="inspect-approve-btn">
+                            APPROVE
+                          </button>
+                        ` : ''}
+                        ${isCommentOwner ? `
+                          <button onclick="deleteSolution(${ticket.id},${solId})" class="text-sm text-red-700 font-bold">
+                            DELETE
+                          </button>
+                        ` : ''}
+                      </div>
+                    </div>
+
+                    <p class="text-black leading-snug pl-1 mt-1">${makeLinksClickable(s.text)}</p>
+
+                    ${s.image ? `
+                      <div class="mt-1">
+                        <a href="${s.image}" target="_blank" rel="noopener noreferrer">
+                          <img src="${s.image}" alt="Comment Image" class="max-h-24 rounded border border-slate-400 object-contain" />
+                        </a>
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')
+          )}
         </div>
-      `}
+      </div>
+
+      ${!isResolved ? `
+        <form onsubmit="submitSolution(event, ${ticket.id})" class="inspect-form">
+          <div class="inspect-action-bar">
+            <label class="inspect-file-label">
+              Choose File
+              <input type="file" id="commentImageInput" accept="image/*" class="inspect-file-input">
+            </label>
+          </div>
+          <div class="inspect-input-row">
+            <input type="text" id="solutionInput" required maxlength="300" placeholder="leave a comment..." class="inspect-input">
+            <button type="submit" class="inspect-send-btn">SEND</button>
+          </div>
+        </form>
+      ` : ''}
 
     </div>
   `;
+}
+
+function approveDirectTicket(ticketId) {
+  const user = JSON.parse(localStorage.getItem('solveit_user'));
+  if (!user) return;
+
+  const tickets = getTickets();
+  const ticket = tickets.find(t => parseInt(t.id, 10) === parseInt(ticketId, 10));
+
+  if (!ticket || ticket.issuer !== user.username) return;
+
+  ticket.status = 'RESOLVED';
+  localStorage.setItem('solveit_tickets', JSON.stringify(tickets));
+  renderTicketPage(ticketId);
+  renderTickets();
 }
 
 function approveSolution(ticketId, solId) {
@@ -854,47 +788,43 @@ function openNotificationsModal() {
   checkUserSession();
 
   modal.innerHTML = `
-    <div class="ticket-modal ticket-modal--neutral max-w-md w-full p-5 relative text-white">
-      <div class="flex justify-between items-center mb-3 pb-2 border-b border-dashed border-slate-800">
-        <h3 class="text-xs font-bold text-slate-300 uppercase">NOTIFICATIONS (${notifs.length})</h3>
-        <button onclick="closeNotificationsModal()" class="ticket-modal-close">✕</button>
-      </div>
+    <div class="dm dm--notif" role="dialog" aria-modal="true" aria-labelledby="notifTitle">
+      <h3 id="notifTitle" class="dm-title">NOTIFICATIONS (${notifs.length})</h3>
+      <button type="button" onclick="closeNotificationsModal()" class="dm-x" aria-label="Close"></button>
 
-      <div class="space-y-2 max-h-72 overflow-y-auto mb-4">
+      <div class="dm-list">
         ${notifs.length === 0 ? `
-          <p class="text-xs text-slate-500 text-center py-6">No notifications found.</p>
+          <p class="dm-empty">No notifications found.</p>
         ` : notifs.map(n => `
-          <div onclick="closeNotificationsModal(); openDetailModal(${n.ticketId})" class="p-2.5 bg-[#09090b] border border-slate-800 rounded cursor-pointer hover:border-amber-500/50 transition">
-            <p class="text-xs text-slate-200 mb-1">${n.message}</p>
-            <span class="text-[10px] text-slate-500">${n.timestamp}</span>
+          <div class="dm-row dm-row--notif">
+            <div class="dm-row-text" onclick="closeNotificationsModal(); openDetailModal(${n.ticketId})" title="${escAttr(n.message)}">
+              <p class="dm-row-msg">${n.message}</p>
+              <span class="dm-row-meta">${n.timestamp}</span>
+            </div>
+            <button type="button" class="dm-row-btn dm-row-btn--white" onclick="closeNotificationsModal(); openDetailModal(${n.ticketId})">Inspect</button>
+            <button type="button" class="dm-row-btn dm-row-btn--red" onclick="deleteNotification(${n.id})">Delete</button>
           </div>
         `).join('')}
       </div>
-
-      ${notifs.length > 0 ? `
-        <div class="flex justify-end">
-          <button onclick="clearNotifications()" class="text-xs text-red-400 hover:text-red-300 font-bold transition uppercase">
-            Clear All
-          </button>
-        </div>
-      ` : ''}
     </div>
   `;
 
   modal.classList.remove('hidden');
 }
 
+function deleteNotification(id) {
+  const user = JSON.parse(localStorage.getItem('solveit_user'));
+  if (!user) return;
+  const key = `solveit_notifs_${user.username}`;
+  const notifs = JSON.parse(localStorage.getItem(key) || '[]').filter(n => n.id !== id);
+  localStorage.setItem(key, JSON.stringify(notifs));
+  checkUserSession();
+  openNotificationsModal();
+}
+
 function closeNotificationsModal() {
   const modal = document.getElementById('notificationsModal');
   if (modal) modal.classList.add('hidden');
-}
-
-function clearNotifications() {
-  const user = JSON.parse(localStorage.getItem('solveit_user'));
-  if (!user) return;
-  localStorage.removeItem(`solveit_notifs_${user.username}`);
-  checkUserSession();
-  openNotificationsModal();
 }
 
 function openYourProjectsModal() {
@@ -916,49 +846,30 @@ function openYourProjectsModal() {
   const myIssued = tickets.filter(t => t.issuer === user.username);
   const myReserved = tickets.filter(t => t.reservedBy === user.username);
 
-  modal.innerHTML = `
-    <div class="ticket-modal ticket-modal--neutral max-w-lg w-full p-5 relative text-white max-h-[85vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-4 pb-2 border-b border-dashed border-slate-800">
-        <h3 class="text-xs font-bold text-slate-300 uppercase">YOUR PROJECTS</h3>
-        <button onclick="closeYourProjectsModal()" class="ticket-modal-close">✕</button>
+  const row = (t, redLabel, redAction) => `
+    <div class="dm-row dm-row--proj">
+      <div class="dm-row-text" onclick="closeYourProjectsModal(); openDetailModal(${t.id})" title="${escAttr(t.title)}">
+        <p class="dm-row-msg"><strong>#${formatTicketId(t.id)}</strong> ${t.title}</p>
+        ${t.status === 'RESOLVED' ? '<span class="dm-row-meta dm-row-ok">RESOLVED</span>' : ''}
       </div>
+      <button type="button" class="dm-row-btn dm-row-btn--white" onclick="closeYourProjectsModal(); openDetailModal(${t.id})">Inspect</button>
+      ${redAction
+        ? `<button type="button" class="dm-row-btn dm-row-btn--red" onclick="${redAction}">${redLabel}</button>`
+        : `<button type="button" class="dm-row-btn dm-row-btn--red">${redLabel}</button>`}
+    </div>
+  `;
 
-      <div class="space-y-5">
-        <div>
-          <h4 class="text-xs font-bold text-amber-400 mb-2 uppercase">ISSUED BY YOU (${myIssued.length})</h4>
-          <div class="space-y-2">
-            ${myIssued.length === 0 ? '<p class="text-xs text-slate-500">No projects issued yet.</p>' : myIssued.map(t => `
-              <div class="p-2.5 bg-[#09090b] border border-slate-800 rounded flex justify-between items-center text-xs">
-                <div>
-                  <span class="text-slate-400 font-bold">#${formatTicketId(t.id)}</span>
-                  <span class="font-bold text-slate-200 ml-2">${t.title}</span>
-                  ${t.status === 'RESOLVED' ? '<span class="ml-2 text-[10px] text-emerald-400 font-bold">RESOLVED</span>' : ''}
-                </div>
-                <div class="flex gap-2">
-                  <button onclick="closeYourProjectsModal(); openDetailModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded text-[10px] font-bold uppercase">Inspect</button>
-                  <button onclick="deleteTicket(null, ${t.id}); openYourProjectsModal();" class="text-red-400 hover:text-red-300 px-1 py-1 text-[10px] font-bold uppercase">Delete</button>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
+  modal.innerHTML = `
+    <div class="dm dm--proj" role="dialog" aria-modal="true" aria-labelledby="projTitle">
+      <h3 id="projTitle" class="dm-title">YOUR PROJECTS</h3>
+      <button type="button" onclick="closeYourProjectsModal()" class="dm-x" aria-label="Close"></button>
 
-        <div>
-          <h4 class="text-xs font-bold text-emerald-400 mb-2 uppercase">RESERVED BY YOU (${myReserved.length})</h4>
-          <div class="space-y-2">
-            ${myReserved.length === 0 ? '<p class="text-xs text-slate-500">No projects reserved yet.</p>' : myReserved.map(t => `
-              <div class="p-2.5 bg-[#09090b] border border-slate-800 rounded flex justify-between items-center text-xs">
-                <div>
-                  <span class="text-slate-400 font-bold">#${formatTicketId(t.id)}</span>
-                  <span class="font-bold text-slate-200 ml-2">${t.title}</span>
-                </div>
-                <div class="flex gap-2">
-                  <button onclick="closeYourProjectsModal(); openDetailModal(${t.id})" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded text-[10px] font-bold uppercase">Inspect</button>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
+      <div class="dm-list">
+        <h4 class="dm-sec dm-sec--issued">ISSUED BY YOU (${myIssued.length})</h4>
+        ${myIssued.length === 0 ? '<p class="dm-empty">No projects issued.</p>' : myIssued.map(t => row(t, 'Delete', `deleteTicket(null, ${t.id}); openYourProjectsModal();`)).join('')}
+
+        <h4 class="dm-sec dm-sec--reserved">RESERVED BY YOU (${myReserved.length})</h4>
+        ${myReserved.length === 0 ? '<p class="dm-empty">No projects reserved.</p>' : myReserved.map(t => row(t, t.status === 'RESOLVED' ? 'Solved' : 'Release', t.status === 'RESOLVED' ? '' : `toggleReserveTicket(null, ${t.id}); openYourProjectsModal();`)).join('')}
       </div>
     </div>
   `;
@@ -1061,93 +972,4 @@ function openPostModal() {
 function closePostModal() { 
   const modal = document.getElementById('postModal');
   if (modal) modal.classList.add('hidden');
-}
-
-function renderProfilePage(username) {
-  const container = document.getElementById('profilePageContainer');
-  if (!container) return;
-
-  const tickets = getTickets();
-  const userTickets = tickets.filter(t => t.issuer === username);
-
-  const userSolutions = [];
-  tickets.forEach(t => {
-    if (t.solutions && Array.isArray(t.solutions)) {
-      t.solutions.forEach(s => {
-        if (s.solver === username) {
-          userSolutions.push({ ticketTitle: t.title, ticketId: t.id, solutionText: s.text });
-        }
-      });
-    }
-  });
-
-  container.innerHTML = `
-    <button onclick="closeProfileModal()" class="text-xs text-slate-400 hover:text-white font-bold uppercase mb-6 inline-block font-mono-ticket">← Back to tickets</button>
-
-    <div class="text-white">
-      <div class="flex items-center gap-4 mb-8">
-        <div class="w-14 h-14 rounded-full bg-amber-500/15 border border-amber-400/40 flex items-center justify-center text-amber-300 font-bold text-2xl font-mono-ticket">
-          <span>${username.charAt(0).toUpperCase()}</span>
-        </div>
-        <div>
-          <h1 class="text-2xl font-bold text-white font-mono-ticket">@${username}</h1>
-        </div>
-      </div>
-
-      <div class="flex gap-6 mb-6 border-b border-dashed border-slate-800 pb-3 max-w-3xl">
-        <button onclick="switchProfileTab('issues')" id="tabBtnIssues" class="text-xs font-mono-ticket font-bold text-amber-300 border-b-2 border-amber-400 pb-1">
-          ISSUES CREATED (${userTickets.length})
-        </button>
-        <button onclick="switchProfileTab('solutions')" id="tabBtnSolutions" class="text-xs font-mono-ticket font-bold text-slate-400 hover:text-slate-200 pb-1">
-          SOLUTIONS PROVIDED (${userSolutions.length})
-        </button>
-      </div>
-
-      <div id="profileIssuesList" class="grid gap-3 md:grid-cols-2 max-w-3xl">
-        ${userTickets.length === 0
-          ? `<p class="text-xs text-slate-500 font-mono-ticket py-4 text-center col-span-2">// NO ISSUES PUBLISHED YET</p>`
-          : userTickets.map(t => `
-            <div onclick="openDetailModal(${t.id})" class="p-3 bg-[#09090b] border border-slate-800 rounded hover:border-amber-500/50 transition cursor-pointer flex justify-between items-center">
-              <div>
-                <span class="text-[10px] font-mono-ticket text-amber-300 border border-amber-400/30 px-1.5 py-0.5 rounded">${t.category}</span>
-                <h4 class="text-sm font-bold text-white font-mono-ticket mt-1">${t.title}</h4>
-              </div>
-              <span class="text-xs font-mono-ticket text-slate-500">${t.status === 'RESOLVED' ? 'SOLVED' : 'OPEN'}</span>
-            </div>
-          `).join('')}
-      </div>
-
-      <div id="profileSolutionsList" class="grid gap-3 md:grid-cols-2 max-w-3xl hidden">
-        ${userSolutions.length === 0
-          ? `<p class="text-xs text-slate-500 font-mono-ticket py-4 text-center col-span-2">// NO SOLUTIONS SUBMITTED YET</p>`
-          : userSolutions.map(s => `
-            <div onclick="openDetailModal(${s.ticketId})" class="p-3 bg-[#09090b] border border-slate-800 rounded hover:border-emerald-500/50 transition cursor-pointer">
-              <span class="text-[10px] font-mono-ticket text-slate-400">// ON TICKET: <strong class="text-white">${s.ticketTitle}</strong></span>
-              <p class="text-xs text-slate-300 font-mono-ticket mt-1 line-clamp-2">"${s.solutionText}"</p>
-            </div>
-          `).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function switchProfileTab(tab) {
-  const issuesList = document.getElementById('profileIssuesList');
-  const solutionsList = document.getElementById('profileSolutionsList');
-  const btnIssues = document.getElementById('tabBtnIssues');
-  const btnSolutions = document.getElementById('tabBtnSolutions');
-
-  if (!issuesList || !solutionsList || !btnIssues || !btnSolutions) return;
-
-  if (tab === 'issues') {
-    issuesList.classList.remove('hidden');
-    solutionsList.classList.add('hidden');
-    btnIssues.className = "text-xs font-mono-ticket font-bold text-amber-300 border-b-2 border-amber-400 pb-1";
-    btnSolutions.className = "text-xs font-mono-ticket font-bold text-slate-400 hover:text-slate-200 pb-1";
-  } else {
-    issuesList.classList.add('hidden');
-    solutionsList.remove('hidden');
-    btnSolutions.className = "text-xs font-mono-ticket font-bold text-emerald-400 border-b-2 border-emerald-500 pb-1";
-    btnIssues.className = "text-xs font-mono-ticket font-bold text-slate-400 hover:text-slate-200 pb-1";
-  }
 }
