@@ -708,7 +708,7 @@ textarea.dm-input { resize: none; padding-top: 1.6cqw; padding-bottom: 1.6cqw; l
 
 .inspect-desc-sec {
   position: absolute;
-  top: 28%;
+  top: 26%;
   left: 10%;
   right: 10%;
   height: 13%;
@@ -721,7 +721,7 @@ textarea.dm-input { resize: none; padding-top: 1.6cqw; padding-bottom: 1.6cqw; l
 
 .inspect-solutions-sec {
   position: absolute;
-  top: 39%;
+  top: 40%;
   left: 10%;
   right: 15%;
   height: 25%;
