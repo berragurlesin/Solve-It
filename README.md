@@ -18,15 +18,13 @@ This is exactly where Solve It comes in. Solve It transforms every issue into a 
 
 ## Preview
 
-<img width="1207" height="846" alt="image" src="https://github.com/user-attachments/assets/16a799b8-3bd1-4620-aa1e-63fb47d68042" />
-
+<img width="1227" height="866" alt="image" src="https://github.com/user-attachments/assets/731fcf38-beae-4200-b985-19530ecf7cca" />
 
 ## Features
 
 * **Registration and Login:** Users can create accounts and log in.
-* **User Profiles:** Users activity history (their issues and solutions) can be viewed on this profile page.
 * **“My Projects” Tab:** Users can track their published issues or solution suggestions from this page.
-* **Real-Time Notifications:** Users receive notifications when a new solution is added to their ticket or a comment is posted.
+* **Notifications:** Users receive notifications when a new solution is added to their ticket or a comment is posted.
 * **Search Bar:** Users can search through tickets by keywords, titles etc.
 * **Urgency and Category Filtering:** When searching for issues, they can be categorized by subject and urgency. Problems with published solutions are also in a separate page and can be filtered.
 * **“Same Issue” Button:** Users can click this button to say that they experience the same issue. This allows to filter the common problems.
@@ -40,10 +38,10 @@ https://berragurlesin.github.io/Solve-It/
 
 ## What Did I Use?
 
-* **Frontend:** HTML5, CSS3, JavaScript (ES6+)
-* **UI & Styling:** Custom CSS modals, responsive layouts
-* **Client-Side Processing:** HTML5 canvas API (image optimization and downscaling)
-* **Data & Media Handling:** Base64 encoding for assets and attachments
+* HTML5, CSS3, JavaScript (ES6+)
+* Custom CSS modals, responsive layouts
+* HTML5 canvas API (image optimization and downscaling)
+* Base64 encoding for assets and attachments
 
 ## How to Run it Locally?
 
@@ -61,7 +59,6 @@ I’ve completed the MVP for now but, there are many things that come to mind an
 
 * **Welcome and Sign-Up Screen:** Maybe I can design a new screen for logging and signing in, it's like that on most sites. 
 * **User Guide:** I can add a user guide explaining people how to use the platform.
-* **New Ticket Design for Resolved Issues:** I want to design a new look for resolved tickets like the ones from cinemas or airplanes, actually I plan to draw the tickets from scratch.
 * **Mobile App Version:** I'm thinking about creating a mobile version of Solve It and maybe releasing it as an app.
 * **Earning Money, Scoring etc.** It would be good if users can rate the solutions, or money can be made. I need to ensure sustainability.
 ## License
