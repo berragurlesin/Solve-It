@@ -16,7 +16,7 @@ Now I will describe how can you use Solve It for both user profiles.
 
 ### -For problem owners (If you wanna share an issue, follow this)
 * First, create an account for yourself. You can use the "sign up" button.
-* Then, click the "new ticket" button. Give your problem a title, select a category and add a image if you need. If your problem is truly urgent, check the urgent button so it gets filtered as urgent.
+* Then, click the "new ticket" button. Give your problem a title, select a category and add a image if you need. If your problem is truly urgent, check the urgent button so it gets filtered.
 * Now, if there are others experiencing the same problem they will be able to indicate it using the button on the ticket. You can do the same for other tickets as well.
 * And you can track all the tickets you've created on the "my projects" page. You can also delete them if you want.
 * People who want to offer a solution to your problem or share an idea can leave comments. You will receive notifications for all of these and if there is a good solution you can approve it. That's it. The ticket will then be marked as resolved!
@@ -26,7 +26,7 @@ Now I will describe how can you use Solve It for both user profiles.
 ### -For entrepreneurs/solvers (If you wanna help other people with solving their problems, follow this)
 * You need to create an account first, you can use the "sign up" button.
 * Afterwards, you can type keywords related to the topic you are interested in into the search bar, or filter by category using the filter options. You can also filter for the most urgent and common issues, allowing you to seek solutions for more critical ones.
-* If you want to worj on a problem, you can reserve it using the "reserve" button. When you click it you will be asked to share your thoughts, you can quickly describe your plan. This prevents others from working on the same issue.
+* If you want to work on a problem, you can reserve it using the "reserve" button. When you click it you will be asked to share your thoughts, you can quickly describe your plan. This prevents others from working on the same issue. (of course, you can track the tickets you've reserved on the "my projects" page)
 * If you have a solution or recommendation, you can explain it in the comments section of the ticket details (you can do this by clicking direcktly on the ticket too) and attach an image if you want. If the issuer finds your solution effective, they will approve it and then the issue will be resolved!
 
 ## Live demo link (so you can try Solve It quickly!)
@@ -39,7 +39,7 @@ Now I will describe how can you use Solve It for both user profiles.
 * Base64 encoding for assets and attachments 
 
 ## Notes
-I hand drew all the components myself while designing Solve It, from the boxes and buttons to the filters. I wanted to give it a warmer look that differs from standard forums. And I designed the logo myself too. The mixed orange shape between the Solve and It is symolizes a problem to be solved, which is the platforms main theme. This shape is also the site's favicon. I tried to talk about ecerything as best as I could. If you have any suggestions or questions, please feel free to share tem (or let me know if you find a bug etc.) I hope you find Solve It useful!
+I hand drew all the components myself while designing Solve It, from the boxes and buttons to the filters. I wanted to give it a warmer look that differs from standard forums. And I designed the logo myself too. The mixed orange shape between the Solve and It is symolizes a problem to be solved, which is the platforms main theme. This shape is also the site's favicon. I tried to talk about everything as best as I could. If you have any suggestions or questions, please feel free to share them (or lmk if you find a bug etc.) I hope you find Solve It useful!
 
 Even though the MVP is finished for now, there are many things I plan to develop and add to the platform:
 * Maybe I can design a new screen for logging and signing in, it's like that on most sites.
@@ -49,7 +49,6 @@ Even though the MVP is finished for now, there are many things I plan to develop
 * Actually, this is the most important one. The site is currently running locally. However, I need to make some adjustments for it to truly achiece the platforms purpose.
 
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) for details.
 
 
